@@ -1,0 +1,12 @@
+{
+  "name": "localhost/freelancer.fajar.io",
+  "description": "freelancer",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Muhammad Syafiq",
+      "email": "syafiq.rezpector@gmail.com"
+    }
+  ]
+}

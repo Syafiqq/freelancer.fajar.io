@@ -1,0 +1,21 @@
+{
+  "name": "Syafiq",
+  "authors": [
+    "Syafiqq <syafiq.rezpector@gmail.com>"
+  ],
+  "description": "freelancer.fajar.io",
+  "main": "index.php",
+  "keywords": [
+    "freelancer"
+  ],
+  "license": "MIT",
+  "homepage": "freelancer.fajar.esy.es",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
