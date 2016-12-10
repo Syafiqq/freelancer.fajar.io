@@ -1,5 +1,5 @@
 {
-  "name": "Syafiq",
+  "name": "syafiq",
   "authors": [
     "Syafiqq <syafiq.rezpector@gmail.com>"
   ],
@@ -17,5 +17,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "bootstrap": "v3.3.7",
+    "jquery": "^3.1.1"
+  }
 }
