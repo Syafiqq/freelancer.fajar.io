@@ -6,11 +6,6 @@
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-if (!isset($isVersionEnabled))
-{
-    $isVersionEnabled = false;
-}
-
 if (!isset($data))
 {
     $data = array();
@@ -45,20 +40,7 @@ if (!isset($data))
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
-    <?php
-    if ($isVersionEnabled)
-    {
-        ?>
-        <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-purple.min.css') ?>">
-        <?php
-    }
-    else
-    {
-        ?>
-        <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
-        <?php
-    }
-    ?>
+    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
 
     <script src="<?php echo base_url('assets/frontend/bower_components/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') ?>"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -68,20 +50,7 @@ if (!isset($data))
     <script src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/respond.min.js')?>"></script>
     <![endif]-->
 </head>
-<?php
-if ($isVersionEnabled)
-{
-?>
-<body class="hold-transition skin-purple layout-top-nav">
-<?php
-}
-else
-{
-?>
 <body class="hold-transition skin-blue layout-top-nav">
-<?php
-}
-?>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -110,10 +79,10 @@ else
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <?php if ($isVersionEnabled)
-                {
-                    echo '<button id="modal-do-edit" type="button" class="btn btn-primary"><i class="fa fa-pencil"></i> &nbsp;Edit Data</button>';
-                } ?>
+                <button id="modal-do-edit" type="button" class="btn btn-primary">
+                    <i class="fa fa-pencil"></i>
+                    &nbsp;Edit Data
+                </button>
             </div>
         </div>
     </div>
@@ -151,14 +120,6 @@ else
                             <ul class="dropdown-menu">
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
-                                    <?php if (!$isVersionEnabled)
-                                    {
-                                        ?>
-                                        <div class="pull-left">
-                                            <a id="versioning" href="<?php echo base_url('dashboard/do_versioning') ?>" class="btn btn-default btn-flat">Enable Editing</a>
-                                        </div>
-                                        <?php
-                                    } ?>
                                     <div class="pull-right">
                                         <a id="sign-out" href="<?php echo base_url('auth/do_signout') ?>" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
