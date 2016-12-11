@@ -71,21 +71,9 @@ class Auth extends CI_Controller
                 if (count($result) > 0)
                 {
                     $_SESSION['user']['profile'] = $result[0];
-                    /*$this->load->model('mversioning');
-                    $result = $this->mversioning->createAndLoadVersion($_SESSION['user']['profile']['id'], Carbon::now('UTC')->toDateTimeString());
-                    if (count($result) > 0)
-                    {
-                        $_SESSION['user']['version'] = $result[0];*/
-                        echo json_encode(array('code' => 200, 'message' => 'Accepted', 'redirect' => base_url('dashboard'), 'data' => array('notify' => array(
-                            array('Authentication complete', 'success')
-                        ))));
-                    /* }
-                     else
-                     {
-                         echo json_encode(array('code' => 403, 'message' => 'Failed to Login', 'data' => array('notify' => array(
-                             array('Failed to Login', 'info')
-                         ))));
-                     }*/
+                    echo json_encode(array('code' => 200, 'message' => 'Accepted', 'redirect' => site_url('dashboard'), 'data' => array('notify' => array(
+                        array('Authentication complete', 'success')
+                    ))));
                 }
                 else
                 {
