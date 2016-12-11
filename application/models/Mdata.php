@@ -32,7 +32,7 @@ class Mdata extends CI_Model
 
     public function getData($id)
     {
-        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `version` FROM `data` WHERE `id` = ? LIMIT 1';
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `timestamp` FROM `data` WHERE `id` = ? LIMIT 1';
         $result = $this->db->query($query, array((int)$id));
         return $result->result_array();
     }
