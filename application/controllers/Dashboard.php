@@ -71,7 +71,7 @@ class Dashboard extends CI_Controller
 
         if (isset($_SESSION['user']['profile']))
         {
-            $this->load->view('dashboard/century_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'dataCount' => $data));
+            $this->load->view('dashboard/century_admin', array('year' => Carbon::now()->year, 'dataCount' => $data));
         }
         else
         {
@@ -111,48 +111,11 @@ class Dashboard extends CI_Controller
 
         if (isset($_SESSION['user']['profile']))
         {
-            $this->load->view('dashboard/year_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'data' => $result, 'dataYear' => $_GET['year']));
+            $this->load->view('dashboard/year_admin', array('year' => Carbon::now()->year, 'data' => $result, 'dataYear' => $_GET['year']));
         }
         else
         {
             $this->load->view('dashboard/year_free', array('year' => Carbon::now()->year, 'data' => $result, 'dataYear' => $_GET['year']));
-        }
-    }
-
-    public function do_versioning()
-    {
-        if ($this->input->is_ajax_request() && ($_SERVER['REQUEST_METHOD'] === 'POST'))
-        {
-            if (isset($_SESSION['user']['profile']))
-            {
-                $this->load->model('mversioning');
-                $result = $this->mversioning->createAndLoadVersion($_SESSION['user']['profile']['id'], Carbon::now('UTC')->toDateTimeString());
-                if (count($result) > 0)
-                {
-                    $_SESSION['user']['version'] = $result[0];
-                    echo json_encode(array('code' => 200, 'message' => 'Editing Enabled', 'redirect' => site_url('dashboard'), 'data' => array('notify' => array(
-                        array('Editing Enabled', 'success')
-                    ))));
-                }
-                else
-                {
-                    echo json_encode(array('code' => 403, 'message' => 'Failed to Enable', 'data' => array('notify' => array(
-                        array('Failed to Enable', 'info')
-                    ))));
-                }
-            }
-            else
-            {
-                echo json_encode(array('code' => 402, 'message' => 'Access Denied', 'data' => array('notify' => array(
-                    array('Access Denied', 'info')
-                ))));
-            }
-        }
-        else
-        {
-            echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
-                array('danger', 'Bad Request')
-            ))));
         }
     }
 
