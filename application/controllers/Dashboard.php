@@ -71,11 +71,11 @@ class Dashboard extends CI_Controller
 
         if (isset($_SESSION['user']['profile']))
         {
-            $this->load->view('dashboard/index_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'dataCount' => $data));
+            $this->load->view('dashboard/century_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'dataCount' => $data));
         }
         else
         {
-            $this->load->view('dashboard/index_free', array('year' => Carbon::now()->year, 'dataCount' => $data));
+            $this->load->view('dashboard/century_free', array('year' => Carbon::now()->year, 'dataCount' => $data));
         }
     }
 
