@@ -38,18 +38,6 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
-        if (isset($_SESSION['user']['profile']))
-        {
-            $this->index_admin();
-        }
-        else
-        {
-            $this->load->view('dashboard/index_free');
-        }
-    }
-
-    private function index_admin()
-    {
         if (!isset($_GET['century']))
         {
             $_GET['century'] = 1900;
@@ -74,22 +62,18 @@ class Dashboard extends CI_Controller
             array_push($data, array('year' => $i, 'count' => 0));
         }
 
-        $this->load->view('dashboard/index_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'dataCount' => $data));
-    }
 
-    public function year()
-    {
         if (isset($_SESSION['user']['profile']))
         {
-            $this->year_admin();
+            $this->load->view('dashboard/index_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'dataCount' => $data));
         }
         else
         {
-            $this->load->view('dashboard/index_free');
+            $this->load->view('dashboard/index_free', array('year' => Carbon::now()->year, 'dataCount' => $data));
         }
     }
 
-    private function year_admin()
+    public function year()
     {
         if (!isset($_GET['year']))
         {
@@ -118,7 +102,15 @@ class Dashboard extends CI_Controller
 
         }
 
-        $this->load->view('dashboard/year_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'data' => $result, 'dataYear' => $_GET['year']));
+
+        if (isset($_SESSION['user']['profile']))
+        {
+            $this->load->view('dashboard/year_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'data' => $result, 'dataYear' => $_GET['year']));
+        }
+        else
+        {
+            $this->load->view('dashboard/year_free', array('year' => Carbon::now()->year, 'data' => $result, 'dataYear' => $_GET['year']));
+        }
     }
 
     public function do_versioning()
@@ -156,39 +148,6 @@ class Dashboard extends CI_Controller
                 array('danger', 'Bad Request')
             ))));
         }
-    }
-
-    public function detail()
-    {
-        if (isset($_SESSION['user']['profile']))
-        {
-            $this->detail_admin();
-        }
-        else
-        {
-            $this->load->view('dashboard/index_free');
-        }
-    }
-
-    private function detail_admin()
-    {
-        if (!isset($_GET['id']))
-        {
-            $_GET['id'] = 1;
-        }
-        $this->load->model('mdata');
-        $result = $this->mdata->getData($_GET['id']);
-        if (count($result) > 0)
-        {
-            $result = $result[0];
-        }
-        else
-        {
-            $result = null;
-        }
-
-        $this->load->view('dashboard/detail_admin', array('year' => Carbon::now()->year, 'isVersionEnabled' => isset($_SESSION['user']['version']), 'data' => $result, 'dataID' => $_GET['id']));
-
     }
 
     public function do_get_detail()
