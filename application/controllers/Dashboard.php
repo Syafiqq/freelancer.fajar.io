@@ -36,7 +36,13 @@ class Dashboard extends CI_Controller
         // Your own constructor code
     }
 
+
     public function index()
+    {
+        $this->century();
+    }
+
+    public function century()
     {
         if (!isset($_GET['century']))
         {
