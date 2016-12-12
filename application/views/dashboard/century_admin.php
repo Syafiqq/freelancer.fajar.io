@@ -70,25 +70,36 @@ if (!isset($dataCount))
                         Hukum
                     </a>
                 </div>
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-plus"></i>
+                                Tambah
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Tag</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
 
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        <!-- User Account Menu -->
-                        <li class="dropdown user user-menu">
+                        <li>
                             <!-- Menu Toggle Button -->
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
                                 <!-- The user image in the navbar-->
-                                <i class="fa fa-gears"></i>
+                                <i class="fa fa-sign-out"></i>
+                                Sign Out
                             </a>
-                            <ul class="dropdown-menu">
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-right">
-                                        <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
