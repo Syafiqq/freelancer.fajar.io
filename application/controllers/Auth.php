@@ -100,7 +100,7 @@ class Auth extends CI_Controller
     public function do_signout()
     {
         session_destroy();
-        echo json_encode(array('code' => 200, 'message' => 'Accepted', 'data' => array('notify' => array(
+        echo json_encode(array('code' => 200, 'message' => 'Accepted', 'redirect' => site_url('dashboard'), 'data' => array('notify' => array(
             array('Sign out successfully', 'success')
         ))));
     }

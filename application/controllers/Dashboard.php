@@ -83,7 +83,7 @@ class Dashboard extends CI_Controller
     {
         if (!isset($_GET['year']))
         {
-            $_GET['year'] = 1945;
+            redirect('dashboard');
         }
         $this->load->model('mdata');
         $this->load->model('mtag');
@@ -125,30 +125,292 @@ class Dashboard extends CI_Controller
         {
             if (!isset($_GET['id']))
             {
-                $_GET['id'] = 1;
+                echo json_encode(array('code' => 401, 'message' => 'Insufficient Data', 'data' => array('notify' => array(
+                    array('danger', 'Insufficient Data')
+                ))));
             }
+            else
+            {
+                $this->load->model('mdata');
+                $result = $this->mdata->getData($_GET['id']);
+                if (count($result) > 0)
+                {
+                    $result = $result[0];
+                    $this->load->model('mtag');
+                    $result['tag'] = $this->mtag->getFromDataTag($result['id']);
+                }
+                else
+                {
+                    $result = null;
+                }
+
+                echo json_encode(array('code' => 200, 'message' => 'Get Data Success', 'data' => array('result' => $result, 'edit' => site_url('dashboard/edit?id=' . $_GET['id'])
+                , 'notify' => array(
+                        array('Get Data Success', 'success')
+                    ))));
+            }
+        }
+        else
+        {
+            echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
+                array('danger', 'Bad Request')
+            ))));
+        }
+    }
+
+    public function edit()
+    {
+        if (isset($_SESSION['user']['profile']))
+        {
+            if (!isset($_GET['id']))
+            {
+                redirect('dashboard');
+            }
+
+            $this->load->model('mtag');
             $this->load->model('mdata');
             $result = $this->mdata->getData($_GET['id']);
+            $tags = $this->mtag->getAll();
             if (count($result) > 0)
             {
                 $result = $result[0];
-                $this->load->model('mtag');
-                $result['tag'] = $this->mtag->getFromDataTag($result['id']);
+                $result['tag'] = $this->mtag->getIDFromDataTag($result['id']);
             }
             else
             {
                 $result = null;
             }
 
-            echo json_encode(array('code' => 200, 'message' => 'Get Data Success', 'data' => array('result' => $result, 'edit' => site_url('dashboard/edit?id=' . $_GET['id'])
-            , 'notify' => array(
-                    array('Get Data Success', 'success')
+            $this->load->view('dashboard/edit', array('year' => Carbon::now()->year, 'data' => $result, 'tags' => $tags));
+        }
+        else
+        {
+            show_404();
+        }
+    }
+
+    public function do_edit()
+    {
+        if ($this->input->is_ajax_request() && ($_SERVER['REQUEST_METHOD'] === 'POST'))
+        {
+            if (isset($_SESSION['user']['profile']))
+            {
+                if (!isset($_GET['id']))
+                {
+                    echo json_encode(array('code' => 401, 'message' => 'Insufficient Data', 'data' => array('notify' => array(
+                        array('Insufficient Data', 'danger')
+                    ))));
+                }
+                else
+                {
+                    $this->load->model('mdata');
+                    $id = $this->mdata->getDataID($_GET['id']);
+                    if (count($id) > 0)
+                    {
+
+                        $_POST['tag'] = isset($_POST['tag']) ? $_POST['tag'] : array();
+                        if (isset($_POST['tag']) &&
+                            isset($_POST['description']) &&
+                            isset($_POST['status'])
+                        )
+                        {
+                            $this->load->model('mdatatag');
+                            $this->load->model('mtag');
+                            $tags = $this->mtag->getAllID();
+                            if (!is_array($_POST['tag']))
+                            {
+                                $_POST['tag'] = array($_POST['tag']);
+                            }
+                            foreach ($_POST['tag'] as $tv)
+                            {
+                                $gt = false;
+                                foreach ($tags as $ttv)
+                                {
+                                    if ($tv == $ttv['id'])
+                                    {
+                                        $gt = true;
+                                        break;
+                                    }
+                                }
+                                if (!$gt)
+                                {
+                                    echo json_encode(array('code' => 401, 'message' => 'Invalid Data', 'data' => array('notify' => array(
+                                        array('Invalid Data', 'danger')
+                                    ))));
+                                    return;
+                                }
+                            }
+
+                            $this->mdata->edit($_GET['id'], $_POST['description'], $_POST['status']);
+                            $this->mdatatag->clear($_GET['id']);
+                            if (count($_POST['tag']) > 0)
+                            {
+                                $this->mdatatag->add($_GET['id'], $_POST['tag']);
+                            }
+                            $year = $this->mdata->getDataYear($_GET['id']);
+
+                            echo json_encode(array('code' => 200, 'message' => 'Edit Data Success', 'redirect' => site_url('dashboard/year?year=' . $year[0]['year']), 'data' => array('notify' => array(
+                                array('Edit Data Success', 'success')
+                            ))));
+
+                        }
+                        else
+                        {
+                            echo json_encode(array('code' => 401, 'message' => 'Insufficient Data', 'data' => array('notify' => array(
+                                array('Insufficient Data', 'danger')
+                            ))));
+                        }
+                    }
+                    else
+                    {
+                        echo json_encode(array('code' => 401, 'message' => 'Invalid Data', 'data' => array('notify' => array(
+                            array('Invalid Data', 'danger')
+                        ))));
+                    }
+                }
+            }
+            else
+            {
+                echo json_encode(array('code' => 401, 'message' => 'Access Denied', 'data' => array('notify' => array(
+                    array('Access Denied', 'danger')
                 ))));
+            }
         }
         else
         {
             echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
-                array('danger', 'Bad Request')
+                array('Bad Request', 'danger')
+            ))));
+        }
+    }
+
+    public function create()
+    {
+        if (isset($_SESSION['user']['profile']))
+        {
+            $this->load->model('mtag');
+            $tags = $this->mtag->getAll();
+            $this->load->view('dashboard/create', array('year' => Carbon::now()->year, 'tags' => $tags));
+        }
+        else
+        {
+            show_404();
+        }
+    }
+
+    public function do_create()
+    {
+        if ($this->input->is_ajax_request() && ($_SERVER['REQUEST_METHOD'] === 'POST'))
+        {
+            if (isset($_SESSION['user']['profile']))
+            {
+
+                $_POST['tag'] = isset($_POST['tag']) ? $_POST['tag'] : array();
+                if (isset($_POST['tag']) &&
+                    isset($_POST['description']) &&
+                    isset($_POST['year']) &&
+                    isset($_POST['no']) &&
+                    isset($_POST['status'])
+                )
+                {
+                    $this->load->model('mdata');
+                    $this->load->model('mdatatag');
+                    $this->load->model('mtag');
+                    $tags = $this->mtag->getAllID();
+                    if (!is_array($_POST['tag']))
+                    {
+                        $_POST['tag'] = array($_POST['tag']);
+                    }
+                    foreach ($_POST['tag'] as $tv)
+                    {
+                        $gt = false;
+                        foreach ($tags as $ttv)
+                        {
+                            if ($tv == $ttv['id'])
+                            {
+                                $gt = true;
+                                break;
+                            }
+                        }
+                        if (!$gt)
+                        {
+                            echo json_encode(array('code' => 401, 'message' => 'Invalid Data', 'data' => array('notify' => array(
+                                array('Invalid Data', 'danger')
+                            ))));
+                            return;
+                        }
+                    }
+
+                    $this->mdata->create($_POST['no'], $_POST['year'], $_POST['description'], $_POST['status']);
+                    $status = $this->mdata->getFromNoAndYear($_POST['no'], $_POST['year']);
+                    if (count($_POST['tag']) > 0)
+                    {
+                        $this->mdatatag->add($status[0]['id'], $_POST['tag']);
+                    }
+
+                    echo json_encode(array('code' => 200, 'message' => 'Create Data Success', 'redirect' => site_url('dashboard/year?year=' . $_POST['year']), 'data' => array('notify' => array(
+                        array('Create Data Success', 'success')
+                    ))));
+                }
+            }
+            else
+            {
+                echo json_encode(array('code' => 401, 'message' => 'Access Denied', 'data' => array('notify' => array(
+                    array('Access Denied', 'danger')
+                ))));
+            }
+        }
+        else
+        {
+            echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
+                array('Bad Request', 'danger')
+            ))));
+        }
+    }
+
+    public function createtag()
+    {
+        if (isset($_SESSION['user']['profile']))
+        {
+            $this->load->view('dashboard/createtag', array('year' => Carbon::now()->year));
+        }
+        else
+        {
+            show_404();
+        }
+    }
+
+    public function do_createtag()
+    {
+        if ($this->input->is_ajax_request() && ($_SERVER['REQUEST_METHOD'] === 'POST'))
+        {
+            if (isset($_SESSION['user']['profile']))
+            {
+
+                if (isset($_POST['name']) &&
+                    isset($_POST['description']) &&
+                    isset($_POST['color']) &&
+                    isset($_POST['colortext'])
+                )
+                {
+                    $this->load->model('mtag');
+                    $this->mtag->create($_POST['name'], $_POST['description'], $_POST['color'], $_POST['colortext']);
+                    echo json_encode(array('code' => 200, 'message' => 'Create Tag Success', 'data' => array('notify' => array(
+                        array('Create Tag Success', 'success')
+                    ))));
+                }
+            }
+            else
+            {
+                echo json_encode(array('code' => 401, 'message' => 'Access Denied', 'data' => array('notify' => array(
+                    array('Access Denied', 'danger')
+                ))));
+            }
+        }
+        else
+        {
+            echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
+                array('Bad Request', 'danger')
             ))));
         }
     }
