@@ -36,4 +36,51 @@ class Mdata extends CI_Model
         $result = $this->db->query($query, array((int)$id));
         return $result->result_array();
     }
+
+    public function getFromNoAndYear($no, $year)
+    {
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `timestamp` FROM `data` WHERE `no` = ? AND `year` = ? LIMIT 1';
+        $result = $this->db->query($query, array($no, $year));
+        return $result->result_array();
+    }
+
+    public function getDataYear($id)
+    {
+        $query = 'SELECT `year` FROM `data` WHERE `id` = ? LIMIT 1';
+        $result = $this->db->query($query, array((int)$id));
+        return $result->result_array();
+    }
+
+    public function getDataID($id)
+    {
+        $query = 'SELECT `id` FROM `data` WHERE `id` = ? LIMIT 1';
+        $result = $this->db->query($query, array((int)$id));
+        return $result->result_array();
+    }
+
+    public function edit($id, $description, $status)
+    {
+        $query = 'UPDATE `data` SET `description`=?,`status`=? WHERE `id` = ?';
+        $this->db->query($query, array($description, $status, (int)$id));
+    }
+
+    public function create($no, $year, $description, $status)
+    {
+        $query = 'INSERT INTO `data`(`id`, `year`, `no`, `description`, `status`, `timestamp`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP)';
+        $this->db->query($query, array($year, $no, $description, $status));
+    }
+
+    public function getLatestTimestamp()
+    {
+        $query = 'SELECT `timestamp` FROM `tag` ORDER BY `timestamp` DESC LIMIT 1';
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+
+    public function getDataWithinBound($from, $to)
+    {
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `timestamp` FROM `data` WHERE `timestamp` > ? AND `timestamp` <= ?';
+        $result = $this->db->query($query, array($from, $to));
+        return $result->result_array();
+    }
 }
