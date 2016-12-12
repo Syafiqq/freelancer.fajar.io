@@ -92,7 +92,7 @@
         <nav class="navbar navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a href="<?php echo base_url('dashboard') ?>" class="navbar-brand">
+                    <a href="<?php echo site_url('dashboard') ?>" class="navbar-brand">
                         <strong>Status</strong>
                         Hukum
                     </a>
@@ -113,7 +113,7 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li>
-                        <a href="<?php echo base_url('dashboard') ?>">
+                        <a href="<?php echo site_url('dashboard') ?>">
                             <i class="fa fa-dashboard"></i>
                             Dashboard
                         </a>
@@ -197,7 +197,7 @@
     <footer class="main-footer">
         <div class="container">
             <strong>Copyright &copy; Freelancer <?php echo isset($year) ? $year : 2016; ?>
-                <a href="<?php echo base_url('dashboard') ?>">
+                <a href="<?php echo site_url('dashboard') ?>">
                     <strong>Status</strong>
                     Hukum
                 </a>
@@ -244,18 +244,19 @@
                         {
                             if (data['data'].hasOwnProperty('result'))
                             {
+                                $("p#modal_deskripsi").text("");
+                                $("p#modal_status").text("");
                                 $("h4#modal_title_no").text(data['data']['result']['no']);
                                 $("p#modal_no").text(data['data']['result']['no']);
                                 if (data['data']['result'].hasOwnProperty('tag'))
                                 {
-                                    console.log(data['data']['result']['tag']);
                                     for (var ti = -1, ts = data['data']['result']['tag'].length; ++ti < ts;)
                                     {
                                         $("p#modal_no").append("&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + data['data']['result']['tag'][ti]['color'] + "; color: #" + data['data']['result']['tag'][ti]['colortext'] + "\"><abbr title=\"" + data['data']['result']['tag'][ti]['description'] + "\">" + data['data']['result']['tag'][ti]['name'] + "</abbr></span>");
                                     }
                                 }
-                                $("p#modal_deskripsi").text(data['data']['result']['description']);
-                                $("p#modal_status").text(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
+                                $("p#modal_deskripsi").append(data['data']['result']['description']);
+                                $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
                                 $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
                                 $('#myModal').modal('show');
                             }
