@@ -70,12 +70,12 @@ if (!isset($data))
                 <h4>
                     <strong>Deskripsi</strong>
                 </h4>
-                <p id="modal_deskripsi">Ini adalah deskripsi</p>
+                <p id="modal_deskripsi"></p>
                 <hr>
                 <h4>
                     <strong>Status</strong>
                 </h4>
-                <p id="modal_status">Ini adalah status</p>
+                <p id="modal_status"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -101,30 +101,41 @@ if (!isset($data))
         <nav class="navbar navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a href="<?php echo base_url('dashboard') ?>" class="navbar-brand">
+                    <a href="<?php echo site_url('dashboard') ?>" class="navbar-brand">
                         <strong>Status</strong>
                         Hukum
                     </a>
+                </div>
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-plus"></i>
+                                Tambah
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Tag</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
 
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
-                        <!-- User Account Menu -->
-                        <li class="dropdown user user-menu">
+                        <li>
                             <!-- Menu Toggle Button -->
-                            <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
                                 <!-- The user image in the navbar-->
-                                <i class="fa fa-gears"></i>
+                                <i class="fa fa-sign-out"></i>
+                                Sign Out
                             </a>
-                            <ul class="dropdown-menu">
-                                <!-- Menu Footer-->
-                                <li class="user-footer">
-                                    <div class="pull-right">
-                                        <a id="sign-out" href="<?php echo base_url('auth/do_signout') ?>" class="btn btn-default btn-flat">Sign out</a>
-                                    </div>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -143,7 +154,7 @@ if (!isset($data))
                 </h1>
                 <ol class="breadcrumb">
                     <li>
-                        <a href="<?php echo base_url('dashboard') ?>">
+                        <a href="<?php echo site_url('dashboard') ?>">
                             <i class="fa fa-dashboard"></i>
                             Dashboard
                         </a>
@@ -227,7 +238,7 @@ if (!isset($data))
     <footer class="main-footer">
         <div class="container">
             <strong>Copyright &copy; Freelancer <?php echo isset($year) ? $year : 2016; ?>
-                <a href="<?php echo base_url('dashboard') ?>">
+                <a href="<?php echo site_url('dashboard') ?>">
                     <strong>Status</strong>
                     Hukum
                 </a>
@@ -259,7 +270,7 @@ if (!isset($data))
          */
         $(function ()
         {
-            $("a#sign-out, a#versioning").on('click', function (event)
+            $("a#sign-out").on('click', function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -322,7 +333,7 @@ if (!isset($data))
             $("button#modal-do-edit").on('click', function (event)
             {
                 event.preventDefault();
-                console.log("abc");
+                location.href = $(this).attr('action');
             });
 
             $("button.btn-go-detail").on('click', function (event)
@@ -340,18 +351,19 @@ if (!isset($data))
                         {
                             if (data['data'].hasOwnProperty('result'))
                             {
+                                $("p#modal_deskripsi").text("");
+                                $("p#modal_status").text("");
                                 $("h4#modal_title_no").text(data['data']['result']['no']);
                                 $("p#modal_no").text(data['data']['result']['no']);
                                 if (data['data']['result'].hasOwnProperty('tag'))
                                 {
-                                    console.log(data['data']['result']['tag']);
                                     for (var ti = -1, ts = data['data']['result']['tag'].length; ++ti < ts;)
                                     {
                                         $("p#modal_no").append("&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + data['data']['result']['tag'][ti]['color'] + "; color: #" + data['data']['result']['tag'][ti]['colortext'] + "\"><abbr title=\"" + data['data']['result']['tag'][ti]['description'] + "\">" + data['data']['result']['tag'][ti]['name'] + "</abbr></span>");
                                     }
                                 }
-                                $("p#modal_deskripsi").text(data['data']['result']['description']);
-                                $("p#modal_status").text(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
+                                $("p#modal_deskripsi").append(data['data']['result']['description']);
+                                $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
                                 $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
                                 $('#myModal').modal('show');
                             }
