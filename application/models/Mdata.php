@@ -25,7 +25,7 @@ class Mdata extends CI_Model
 
     public function getDataNoAccordingToYear($year)
     {
-        $query = 'SELECT `data`.`id`, `data`.`year`, `data`.`no`, count(`data_tag`.`tag`) AS `tag` FROM `data` LEFT OUTER JOIN `data_tag` ON `data`.`id` = `data_tag`.`data`  WHERE `data`.`year` = ? GROUP BY `data`.`id` ORDER BY `data`.`id` ASC';
+        $query = 'SELECT `data`.`id`, `data`.`year`, `data`.`no`, count(`data_tag`.`tag`) AS \'tag\' FROM `data` LEFT OUTER JOIN `data_tag` ON `data`.`id` = `data_tag`.`data`  WHERE `data`.`year` = ? GROUP BY `data`.`id` ORDER BY `data`.`id` ASC';
         $result = $this->db->query($query, array($year));
         return $result->result_array();
     }
