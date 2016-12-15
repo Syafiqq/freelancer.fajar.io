@@ -77,7 +77,7 @@
                                                 <span class="input-group-addon">
                                                     <i class="glyphicon glyphicon-envelope"></i>
                                                 </span>
-                                            <input class="form-control" placeholder="Email@host.com" name="user[email]" type="email" autofocus value="fajar@gmail.com">
+                                            <input class="form-control" placeholder="Email@host.com" name="user[email]" type="email" autofocus value="">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -85,7 +85,7 @@
                                                 <span class="input-group-addon">
                                                     <i class="glyphicon glyphicon-lock"></i>
                                                 </span>
-                                            <input class="form-control" placeholder="Password" name="user[password]" type="password" value="fajar">
+                                            <input class="form-control" placeholder="Password" name="user[password]" type="password" value="">
                                         </div>
                                     </div>
                                     <div class="form-group">
