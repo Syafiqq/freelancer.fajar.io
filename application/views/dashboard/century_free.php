@@ -64,6 +64,20 @@
                         Hukum
                     </a>
                 </div>
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <!-- Menu Toggle Button -->
+                            <a id="sign-in" href="<?php echo site_url('auth/login') ?>">
+                                <!-- The user image in the navbar-->
+                                <i class="fa fa-sign-in"></i>
+                                &nbsp;&nbsp;Sign in
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-custom-menu -->
             </div>
             <!-- /.container-fluid -->
         </nav>
