@@ -16,10 +16,10 @@ class Mdata extends CI_Model
         // Your own constructor code
     }
 
-    public function getCountPerYear($from, $to)
+    public function getCountPerYear()
     {
-        $query = 'SELECT `year`, count(`id`) AS \'count\' FROM `data` WHERE `year` >= ? AND `year` <= ? GROUP BY `year` ORDER BY `year` ASC';
-        $result = $this->db->query($query, array($from, $to));
+        $query = 'SELECT `year`, count(`id`) AS \'count\' FROM `data` GROUP BY `year` ORDER BY `year` ASC';
+        $result = $this->db->query($query);
         return $result->result_array();
     }
 
@@ -62,6 +62,12 @@ class Mdata extends CI_Model
     {
         $query = 'UPDATE `data` SET `description`=?,`status`=? WHERE `id` = ?';
         $this->db->query($query, array($description, $status, (int)$id));
+    }
+
+    public function delete($id)
+    {
+        $query = 'DELETE FROM `data` WHERE `id` = ?';
+        $this->db->query($query, array((int)$id));
     }
 
     public function create($no, $year, $description, $status)
