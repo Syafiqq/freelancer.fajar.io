@@ -36,6 +36,7 @@ if (!isset($dataCount))
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap.min.css') ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/datatables/media/css/dataTables.bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap-theme.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
@@ -83,7 +84,7 @@ if (!isset($dataCount))
                                     <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Tag</a>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
                                 </li>
                             </ul>
                         </li>
@@ -134,32 +135,60 @@ if (!isset($dataCount))
                     </div>
                     <div class="box-body">
                         <?php
-                        foreach ($dataCount as $idx => $val)
+                        if (count($dataCount) > 0)
                         {
-                            if ($idx % 10 == 0)
-                            {
-                                echo "<div class=\"row\" style='margin-top: 16px; margin-bottom: 16px'><div class=\"col-md-1\"></div><div class=\"col-md-1\"><button type=\"button\" " . ($val['count'] > 0 ? "action=\"" . site_url('dashboard/year?year=' . $val['year']) . "\"" : '') . " class=\"btn btn-block " . ($val['count'] <= 0 ? 'btn-danger disabled' : 'get-year btn-primary') . "\">{$val['year']}</button></div>";
-                            }
-                            else if ($idx % 10 == 9)
-                            {
-                                echo "<div class=\"col-md-1\"><button type=\"button\" " . ($val['count'] > 0 ? "action=\"" . site_url('dashboard/year?year=' . $val['year']) . "\"" : '') . " class=\"btn btn-block " . ($val['count'] <= 0 ? 'btn-danger disabled' : 'get-year btn-primary') . "\">{$val['year']}</button></div><div class=\"col-md-1\"></div></div>";
-                            }
-                            else
-                            {
-                                echo "<div class=\"col-md-1\"><button type=\"button\"  " . ($val['count'] > 0 ? "action=\"" . site_url('dashboard/year?year=' . $val['year']) . "\"" : '') . " class=\"btn btn-block " . ($val['count'] <= 0 ? 'btn-danger disabled' : 'get-year btn-primary') . "\">{$val['year']}</button></div>";
-                            }
+                            ?>
+                            <div class="row" style="min-height: 600px">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <table id="uu_data" class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 48px">No</th>
+                                            <th>Tahun</th>
+                                            <th style="width: 120px">Status Hukum</th>
+                                            <th style="width: 80px">Detail</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        foreach ($dataCount as $key => $value)
+                                        {
+                                            $key += 1;
+                                            echo '<tr>';
+                                            echo "<td>{$key}</td>
+                                                  <td>Tahun <strong>{$value['year']}</strong></td>
+                                                  <td align='right'><strong>{$value['count']}</strong> Data</td>
+                                                  <td><button type=\"button\" action=\"" . site_url('dashboard/year?year=' . $value['year']) . "\" class=\"btn btn-go-year btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
+                                            echo '</tr>';
+                                        }
+                                        ?>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tahun</th>
+                                            <th>Status Hukum</th>
+                                            <th>Detail</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        else
+                        {
+                            ?>
+                            <div class="row" style="height: 800px">
+                                <div class="col-md-12">
+                                    <h5 align="center">Tidak Ada Status Hukum yang dapat dimuat</h5>
+                                </div>
+                            </div>
+                            <?php
                         }
                         ?>
                     </div>
                     <div class="box-footer">
-                        <ul class="pagination pull-right">
-                            <li class="page-item">
-                                <a class="page-link" href="<?php echo site_url('dashboard?century=1900') ?>">Tahun 1900</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="<?php echo site_url('dashboard?century=2000') ?>">Tahun 2000</a>
-                            </li>
-                        </ul>
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -190,6 +219,8 @@ if (!isset($dataCount))
 
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/dataTables.bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/fastclick/lib/fastclick.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/app.min.js') ?>"></script>
@@ -263,10 +294,19 @@ if (!isset($dataCount))
                     })
             });
 
-            $("button.get-year").on('click', function (event)
+            $("button.btn-go-year").on('click', function (event)
             {
                 event.preventDefault();
                 location.href = $(this).attr('action');
+            });
+
+            $('table#uu_data').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
             });
         });
 
