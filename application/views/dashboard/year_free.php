@@ -58,19 +58,19 @@
             </div>
             <div class=modal-body>
                 <h4>
-                    <strong>No</strong>
+                    <strong>Nomor</strong>
                 </h4>
                 <p id="modal_no">UU xx.xx.xxx</p>
                 <hr>
                 <h4>
-                    <strong>Deskripsi</strong>
+                    <strong>Tentang</strong>
                 </h4>
-                <p id="modal_deskripsi">Ini adalah deskripsi</p>
+                <p id="modal_deskripsi"></p>
                 <hr>
                 <h4>
                     <strong>Status</strong>
                 </h4>
-                <p id="modal_status">Ini adalah status</p>
+                <p id="modal_status"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
