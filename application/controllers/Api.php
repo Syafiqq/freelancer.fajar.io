@@ -109,7 +109,7 @@ class Api extends CI_Controller
                         $this->load->model('mdatatag');
                         $tag = $this->mtag->getDataWithinBound($_GET['from'], $_GET['to']);
                         $data = $this->mdata->getDataWithinBound($_GET['from'], $_GET['to']);
-                        $datatag = $this->mdatatag->getDataWithinBound('2000-01-01 00:00:00', $_GET['to']);
+                        $datatag = $this->mdatatag->getAll();
                         echo json_encode(array('code' => 200, 'message' => 'Accepted', 'data' => array(
                             'tag' => $tag,
                             'data' => $data,
