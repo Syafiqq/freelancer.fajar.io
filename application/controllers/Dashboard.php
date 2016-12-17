@@ -44,38 +44,16 @@ class Dashboard extends CI_Controller
 
     public function century()
     {
-        if (!isset($_GET['century']))
-        {
-            $_GET['century'] = 1900;
-        }
-        $centuryTo = $_GET['century'] + 99;
         $this->load->model('mdata');
-        $result = $this->mdata->getCountPerYear($_GET['century'], $centuryTo);
-
-        $data = array();
-        $idx = $_GET['century'] - 1;
-        foreach ($result as $value)
-        {
-            for ($idx, $is = $value['year']; ++$idx < $is;)
-            {
-                array_push($data, array('year' => $idx, 'count' => 0));
-            }
-
-            array_push($data, $value);
-        }
-        for ($i = $idx, $is = $centuryTo + 1; ++$i < $is;)
-        {
-            array_push($data, array('year' => $i, 'count' => 0));
-        }
-
+        $result = $this->mdata->getCountPerYear();
 
         if (isset($_SESSION['user']['profile']))
         {
-            $this->load->view('dashboard/century_admin', array('year' => Carbon::now()->year, 'dataCount' => $data));
+            $this->load->view('dashboard/century_admin', array('year' => Carbon::now()->year, 'dataCount' => $result));
         }
         else
         {
-            $this->load->view('dashboard/century_free', array('year' => Carbon::now()->year, 'dataCount' => $data));
+            $this->load->view('dashboard/century_free', array('year' => Carbon::now()->year, 'dataCount' => $result));
         }
     }
 
@@ -144,7 +122,7 @@ class Dashboard extends CI_Controller
                     $result = null;
                 }
 
-                echo json_encode(array('code' => 200, 'message' => 'Get Data Success', 'data' => array('result' => $result, 'edit' => site_url('dashboard/edit?id=' . $_GET['id'])
+                echo json_encode(array('code' => 200, 'message' => 'Get Data Success', 'data' => array('result' => $result, 'edit' => site_url('dashboard/edit?id=' . $_GET['id']), 'delete' => site_url('dashboard/do_delete?id=' . $_GET['id'])
                 , 'notify' => array(
                         array('Get Data Success', 'success')
                     ))));
@@ -267,6 +245,42 @@ class Dashboard extends CI_Controller
                             array('Invalid Data', 'danger')
                         ))));
                     }
+                }
+            }
+            else
+            {
+                echo json_encode(array('code' => 401, 'message' => 'Access Denied', 'data' => array('notify' => array(
+                    array('Access Denied', 'danger')
+                ))));
+            }
+        }
+        else
+        {
+            echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
+                array('Bad Request', 'danger')
+            ))));
+        }
+    }
+
+    public function do_delete()
+    {
+        if ($this->input->is_ajax_request() && ($_SERVER['REQUEST_METHOD'] === 'POST'))
+        {
+            if (isset($_SESSION['user']['profile']))
+            {
+                if (!isset($_GET['id']))
+                {
+                    echo json_encode(array('code' => 401, 'message' => 'Insufficient Data', 'data' => array('notify' => array(
+                        array('Insufficient Data', 'danger')
+                    ))));
+                }
+                else
+                {
+                    $this->load->model('mdata');
+                    $this->mdata->delete($_GET['id']);
+                    echo json_encode(array('code' => 200, 'message' => 'Edit Data Success', 'data' => array('notify' => array(
+                        array('Edit Data Success', 'success')
+                    ))));
                 }
             }
             else

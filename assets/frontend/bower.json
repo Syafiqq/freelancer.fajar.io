@@ -33,6 +33,7 @@
     "datatables": "https://github.com/DataTables/DataTables/archive/1.10.13.tar.gz",
     "select2": "https://github.com/select2/select2/archive/4.0.3.tar.gz",
     "ckeditor_4.6.1_basic": "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.6.1/ckeditor_4.6.1_basic.zip",
-    "bootstrap-colorpicker": "^2.3.6"
+    "bootstrap-colorpicker": "^2.3.6",
+    "bootstrap-confirmation2": "^2.4.0"
   }
 }

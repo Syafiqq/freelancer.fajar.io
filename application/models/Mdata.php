@@ -16,10 +16,10 @@ class Mdata extends CI_Model
         // Your own constructor code
     }
 
-    public function getCountPerYear($from, $to)
+    public function getCountPerYear()
     {
-        $query = 'SELECT `year`, count(`id`) AS \'count\' FROM `data` WHERE `year` >= ? AND `year` <= ? GROUP BY `year` ORDER BY `year` ASC';
-        $result = $this->db->query($query, array($from, $to));
+        $query = 'SELECT `year`, count(`id`) AS \'count\' FROM `data` GROUP BY `year` ORDER BY `year` ASC';
+        $result = $this->db->query($query);
         return $result->result_array();
     }
 
@@ -64,6 +64,12 @@ class Mdata extends CI_Model
         $this->db->query($query, array($description, $status, (int)$id));
     }
 
+    public function delete($id)
+    {
+        $query = 'DELETE FROM `data` WHERE `id` = ?';
+        $this->db->query($query, array((int)$id));
+    }
+
     public function create($no, $year, $description, $status)
     {
         $query = 'INSERT INTO `data`(`id`, `year`, `no`, `description`, `status`, `timestamp`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP)';
@@ -72,7 +78,7 @@ class Mdata extends CI_Model
 
     public function getLatestTimestamp()
     {
-        $query = 'SELECT `timestamp` FROM `tag` ORDER BY `timestamp` DESC LIMIT 1';
+        $query = 'SELECT `timestamp` FROM `data` ORDER BY `timestamp` DESC LIMIT 1';
         $result = $this->db->query($query);
         return $result->result_array();
     }

@@ -63,12 +63,12 @@ if (!isset($data))
             </div>
             <div class=modal-body>
                 <h4>
-                    <strong>No</strong>
+                    <strong>Nomor</strong>
                 </h4>
                 <p id="modal_no">UU xx.xx.xxx</p>
                 <hr>
                 <h4>
-                    <strong>Deskripsi</strong>
+                    <strong>Tentang</strong>
                 </h4>
                 <p id="modal_deskripsi"></p>
                 <hr>
@@ -78,6 +78,19 @@ if (!isset($data))
                 <p id="modal_status"></p>
             </div>
             <div class="modal-footer">
+                <button id="modal-do-delete" class="btn btn-danger pull-left" data-toggle="confirmation"
+                        data-btn-ok-label="Ya" data-btn-ok-icon="glyphicon glyphicon-trash"
+                        data-btn-ok-class="btn-danger"
+                        data-btn-cancel-label="Tidak"
+                        data-btn-cancel-class="btn-success" data-btn-cancel-icon="glyphicon glyphicon-ok"
+                        data-title="Hapus Status Hukum" data-content="Hapus Status Hukum Ini ?">
+                    <i class="fa fa-trash"></i>
+                    &nbsp;Delete Data
+                </button>
+                <!--                <button id="modal-do-delete" type="button" class="btn btn-danger pull-left" data-dismiss="modal">
+                                    <i class="fa fa-trash"></i>
+                                    &nbsp;Delete Data
+                                </button>-->
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button id="modal-do-edit" type="button" class="btn btn-primary">
                     <i class="fa fa-pencil"></i>
@@ -119,7 +132,7 @@ if (!isset($data))
                                     <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Tag</a>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
                                 </li>
                             </ul>
                         </li>
@@ -134,7 +147,7 @@ if (!isset($data))
                             <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
                                 <!-- The user image in the navbar-->
                                 <i class="fa fa-sign-out"></i>
-                                Sign Out
+                                &nbsp;&nbsp;Sign Out
                             </a>
                         </li>
                     </ul>
@@ -255,6 +268,7 @@ if (!isset($data))
 
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-confirmation2/bootstrap-confirmation.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/dataTables.bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
@@ -365,6 +379,7 @@ if (!isset($data))
                                 $("p#modal_deskripsi").append(data['data']['result']['description']);
                                 $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
                                 $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
+                                $("button#modal-do-delete").attr('action', data['data'].hasOwnProperty('delete') ? data['data']['delete'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
                                 $('#myModal').modal('show');
                             }
                             if (data['data'].hasOwnProperty('notify'))
@@ -398,6 +413,69 @@ if (!isset($data))
                             type: 'danger'
                         });
                     });
+            });
+
+            $('button#modal-do-delete').confirmation({
+                popout: true,
+                rootSelector: 'button#modal-do-delete',
+                container: 'body',
+                onConfirm: function ()
+                {
+                    event.preventDefault();
+                    $.ajax({
+                        type: 'post',
+                        url: $(this).attr('action'),
+                        dataType: 'json',
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
+                    })
+                        .done(function (data)
+                        {
+                            if (data.hasOwnProperty('data'))
+                            {
+                                if (data['data'].hasOwnProperty('notify'))
+                                {
+                                    var notify = data['data']['notify'];
+                                    for (var i = -1; ++i < notify.length;)
+                                    {
+                                        $.notify({message: notify[i][0]}, {
+                                            type: notify[i][1],
+                                            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                            '<span data-notify="icon"></span> ' +
+                                            '<span data-notify="title">{1}</span> ' +
+                                            '<span style="color: black" data-notify="message">{2}</span>' +
+                                            '<div class="progress" data-notify="progressbar">' +
+                                            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                                            '</div>' +
+                                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                                            '</div>'
+                                        });
+                                    }
+                                }
+                            }
+                            if (data.hasOwnProperty('code'))
+                            {
+                                if (data['code'] == 200)
+                                {
+                                    setTimeout(function ()
+                                    {
+                                        location.reload();
+                                    }, 2000);
+                                }
+                            }
+
+                        })
+                        .fail(function ()
+                        {
+                            $.notify({
+                                message: 'Error'
+                            }, {
+                                // settings
+                                type: 'danger'
+                            });
+                        })
+
+                }
             });
 
             $('table#uu_data').DataTable({

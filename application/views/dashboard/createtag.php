@@ -95,7 +95,7 @@
                                     <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Tag</a>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
                                 </li>
                             </ul>
                         </li>
@@ -135,7 +135,7 @@
                             Dashboard
                         </a>
                     </li>
-                    <li class="active">Tambah Tag</li>
+                    <li class="active">Tambah Label Pendukung</li>
                 </ol>
             </section>
 
@@ -143,7 +143,7 @@
             <section class="content">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tambah Tag</h3>
+                        <h3 class="box-title">Tambah Label Pendukung</h3>
                     </div>
                     <div class="box-body" style="min-height: 600px">
                         <div class="row">
@@ -151,7 +151,7 @@
                                 <form class="form-horizontal" id="uu_tag_create" action="<?php echo site_url('dashboard/do_createtag') ?>" method="post">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Nama Tag</label>
+                                            <label class="col-sm-2 control-label">Label Pendukung</label>
                                             <div class="col-sm-10">
                                                 <input name="name" type="text" class="form-control" placeholder="Nama Tag">
                                             </div>

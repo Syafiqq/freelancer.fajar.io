@@ -84,7 +84,7 @@ if (!isset($data))
                                     <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Tag</a>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
                                 </li>
                             </ul>
                         </li>
@@ -140,7 +140,7 @@ if (!isset($data))
                                 <form class="form-horizontal" id="uu_form_edit" action="<?php echo site_url('dashboard/do_edit?id=' . $data['id']) ?>" method="post">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Nama</label>
+                                            <label class="col-sm-2 control-label">Nomor</label>
                                             <div class="col-sm-10">
                                                 <p class="form-control-static"><?php echo $data['no'] ?></p>
                                             </div>
@@ -152,9 +152,21 @@ if (!isset($data))
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Tag</label>
+                                            <label for="story_main" class="col-sm-2 control-label">Tentang</label>
                                             <div class="col-sm-10">
-                                                <select name="tag" id="select_tag" class="form-control" multiple="multiple" data-placeholder="Select a Tag" style="width: 100%;">
+                                                <textarea id="uu_description" name="description" class="form-control" rows="10" placeholder="Deskripsi"><?php echo $data['description'] ?></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="story_information" class="col-sm-2 control-label">Status</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="uu_status" style="max-height: 160px" name="status" class="form-control" rows="3" placeholder="Status"><?php echo $data['status'] ?></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Label Pendukung</label>
+                                            <div class="col-sm-10">
+                                                <select name="tag" id="select_tag" class="form-control" multiple="multiple" data-placeholder="Pilih Label Pendukung" style="width: 100%;">
                                                     <?php
                                                     $tmp_st = count($data['tag']);
                                                     $tmp_i = -1;
@@ -173,18 +185,6 @@ if (!isset($data))
                                                         echo "><abbr title=\"{$tag['name']}\">{$tag['description']}</abbr></option>";
                                                     } ?>
                                                 </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="story_main" class="col-sm-2 control-label">Deskripsi</label>
-                                            <div class="col-sm-10">
-                                                <textarea id="uu_description" name="description" class="form-control" rows="10" placeholder="Deskripsi"><?php echo $data['description'] ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="story_information" class="col-sm-2 control-label">Status</label>
-                                            <div class="col-sm-10">
-                                                <textarea id="uu_status" style="max-height: 160px" name="status" class="form-control" rows="3" placeholder="Status"><?php echo $data['status'] ?></textarea>
                                             </div>
                                         </div>
                                     </div>
