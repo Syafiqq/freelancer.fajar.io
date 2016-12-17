@@ -72,7 +72,7 @@ class Mdata extends CI_Model
 
     public function getLatestTimestamp()
     {
-        $query = 'SELECT `timestamp` FROM `tag` ORDER BY `timestamp` DESC LIMIT 1';
+        $query = 'SELECT `timestamp` FROM `data` ORDER BY `timestamp` DESC LIMIT 1';
         $result = $this->db->query($query);
         return $result->result_array();
     }
