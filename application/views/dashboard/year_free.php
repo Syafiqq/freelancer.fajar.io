@@ -153,7 +153,7 @@
                                         <tr>
                                             <th style="width: 48px">No</th>
                                             <th style="width: 60px">Tahun</th>
-                                            <th>No Undang Undang</th>
+                                            <th>Nomor</th>
                                             <th style="width: 80px">Detail</th>
                                         </tr>
                                         </thead>
