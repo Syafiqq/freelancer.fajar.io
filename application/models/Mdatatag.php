@@ -50,4 +50,11 @@ class Mdatatag extends CI_Model
         $result = $this->db->query($query, array($from, $to));
         return $result->result_array();
     }
+
+    public function getAll()
+    {
+        $query = 'SELECT `data`, `tag`, `timestamp` FROM `data_tag`';
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
 }
