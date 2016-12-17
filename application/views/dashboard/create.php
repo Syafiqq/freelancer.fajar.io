@@ -123,7 +123,7 @@ if (!isset($data))
                             Dashboard
                         </a>
                     </li>
-                    <li class="active">Tambah</li>
+                    <li class="active">Tambah Status Hukum</li>
                 </ol>
             </section>
 
@@ -139,7 +139,7 @@ if (!isset($data))
                                 <form class="form-horizontal" id="uu_form_create" action="<?php echo site_url('dashboard/do_create') ?>" method="post">
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Status Hukum</label>
+                                            <label class="col-sm-2 control-label">Nomor</label>
                                             <div class="col-sm-10">
                                                 <input name="no" type="text" class="form-control" placeholder="Status Hukum">
                                             </div>
@@ -151,19 +151,7 @@ if (!isset($data))
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Tag</label>
-                                            <div class="col-sm-10">
-                                                <select name="tag" id="select_tag" class="form-control" multiple="multiple" data-placeholder="Select a Tag" style="width: 100%;">
-                                                    <?php
-                                                    foreach ($tags as $tag)
-                                                    {
-                                                        echo "<option value='{$tag['id']}'><abbr title=\"{$tag['name']}\">{$tag['description']}</abbr></option>";
-                                                    } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="story_main" class="col-sm-2 control-label">Deskripsi</label>
+                                            <label for="story_main" class="col-sm-2 control-label">Tentang</label>
                                             <div class="col-sm-10">
                                                 <textarea id="uu_description" name="description" class="form-control" rows="10" placeholder="Deskripsi"></textarea>
                                             </div>
@@ -172,6 +160,18 @@ if (!isset($data))
                                             <label for="story_information" class="col-sm-2 control-label">Status</label>
                                             <div class="col-sm-10">
                                                 <textarea id="uu_status" style="max-height: 160px" name="status" class="form-control" rows="3" placeholder="Status"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Label Pendukung</label>
+                                            <div class="col-sm-10">
+                                                <select name="tag" id="select_tag" class="form-control" multiple="multiple" data-placeholder="Pilih Label Pendukung" style="width: 100%;">
+                                                    <?php
+                                                    foreach ($tags as $tag)
+                                                    {
+                                                        echo "<option value='{$tag['id']}'><abbr title=\"{$tag['name']}\">{$tag['description']}</abbr></option>";
+                                                    } ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
