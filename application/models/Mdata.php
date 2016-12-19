@@ -32,14 +32,14 @@ class Mdata extends CI_Model
 
     public function getData($id)
     {
-        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `timestamp` FROM `data` WHERE `id` = ? LIMIT 1';
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status` FROM `data` WHERE `id` = ? LIMIT 1';
         $result = $this->db->query($query, array((int)$id));
         return $result->result_array();
     }
 
     public function getFromNoAndYear($no, $year)
     {
-        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `timestamp` FROM `data` WHERE `no` = ? AND `year` = ? LIMIT 1';
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status` FROM `data` WHERE `no` = ? AND `year` = ? LIMIT 1';
         $result = $this->db->query($query, array($no, $year));
         return $result->result_array();
     }
@@ -72,21 +72,21 @@ class Mdata extends CI_Model
 
     public function create($no, $year, $description, $status)
     {
-        $query = 'INSERT INTO `data`(`id`, `year`, `no`, `description`, `status`, `timestamp`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP)';
+        $query = 'INSERT INTO `data`(`id`, `year`, `no`, `description`, `status`) VALUES (NULL, ?, ?, ?, ?)';
         $this->db->query($query, array($year, $no, $description, $status));
     }
 
-    public function getLatestTimestamp()
-    {
-        $query = 'SELECT `timestamp` FROM `data` ORDER BY `timestamp` DESC LIMIT 1';
-        $result = $this->db->query($query);
-        return $result->result_array();
-    }
+    /*    public function getLatestTimestamp()
+        {
+            $query = 'SELECT `timestamp` FROM `data` ORDER BY `timestamp` DESC LIMIT 1';
+            $result = $this->db->query($query);
+            return $result->result_array();
+        }
 
-    public function getDataWithinBound($from, $to)
-    {
-        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `timestamp` FROM `data` WHERE `timestamp` > ? AND `timestamp` <= ?';
-        $result = $this->db->query($query, array($from, $to));
-        return $result->result_array();
-    }
+        public function getDataWithinBound($from, $to)
+        {
+            $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `timestamp` FROM `data` WHERE `timestamp` > ? AND `timestamp` <= ?';
+            $result = $this->db->query($query, array($from, $to));
+            return $result->result_array();
+        }*/
 }
