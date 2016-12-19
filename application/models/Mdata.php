@@ -23,6 +23,13 @@ class Mdata extends CI_Model
         return $result->result_array();
     }
 
+    public function getAll()
+    {
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status` FROM `data` ORDER BY `id` ASC , `year` ASC ';
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+
     public function getDataNoAccordingToYear($year)
     {
         $query = 'SELECT `data`.`id`, `data`.`year`, `data`.`no`, count(`data_tag`.`tag`) AS \'tag\' FROM `data` LEFT OUTER JOIN `data_tag` ON `data`.`id` = `data_tag`.`data`  WHERE `data`.`year` = ? GROUP BY `data`.`id` ORDER BY `data`.`id` ASC';
