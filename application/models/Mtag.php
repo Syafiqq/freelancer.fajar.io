@@ -18,8 +18,20 @@ class Mtag extends CI_Model
 
     public function create($name, $description, $color, $colortext)
     {
-        $query = 'INSERT INTO `tag`(`id`, `name`, `description`, `color`, `colortext`, `timestamp`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP)';
+        $query = 'INSERT INTO `tag`(`id`, `name`, `description`, `color`, `colortext`) VALUES (NULL, ?, ?, ?, ?)';
         $this->db->query($query, array($name, $description, $color, $colortext));
+    }
+
+    public function edit($id, $name, $description, $color, $colortext)
+    {
+        $query = 'UPDATE `tag` SET `name`=?,`description`=?,`color`=?,`colortext`=? WHERE `id`=?';
+        $this->db->query($query, array($name, $description, $color, $colortext, (int)$id));
+    }
+
+    public function delete($id)
+    {
+        $query = 'DELETE FROM `tag` WHERE `id` = ?';
+        $this->db->query($query, array((int)$id));
     }
 
     public function getFromDataTag($data)
@@ -50,17 +62,24 @@ class Mtag extends CI_Model
         return $result->result_array();
     }
 
-    public function getLatestTimestamp()
+    public function getFromID($id)
     {
-        $query = 'SELECT `timestamp` FROM `tag` ORDER BY `timestamp` DESC LIMIT 1';
-        $result = $this->db->query($query);
+        $query = 'SELECT `id`, `name`, `description`, `color`, `colortext` FROM `tag` WHERE `id` = ? LIMIT 1';
+        $result = $this->db->query($query, array((int)$id));
         return $result->result_array();
     }
 
-    public function getDataWithinBound($from, $to)
-    {
-        $query = 'SELECT `id`, `name`, `description`, `color`, `colortext`, `timestamp` FROM `tag` WHERE `timestamp` > ? AND `timestamp` <= ?';
-        $result = $this->db->query($query, array($from, $to));
-        return $result->result_array();
-    }
+    /*    public function getLatestTimestamp()
+        {
+            $query = 'SELECT `timestamp` FROM `tag` ORDER BY `timestamp` DESC LIMIT 1';
+            $result = $this->db->query($query);
+            return $result->result_array();
+        }
+
+        public function getDataWithinBound($from, $to)
+        {
+            $query = 'SELECT `id`, `name`, `description`, `color`, `colortext`, `timestamp` FROM `tag` WHERE `timestamp` > ? AND `timestamp` <= ?';
+            $result = $this->db->query($query, array($from, $to));
+            return $result->result_array();
+        }*/
 }

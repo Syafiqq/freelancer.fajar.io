@@ -83,7 +83,11 @@ if (!isset($data))
                                     <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Tag</a>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
                                 </li>
                             </ul>
                         </li>
@@ -98,7 +102,7 @@ if (!isset($data))
                             <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
                                 <!-- The user image in the navbar-->
                                 <i class="fa fa-sign-out"></i>
-                                Sign Out
+                                &nbsp;&nbsp;Sign Out
                             </a>
                         </li>
                     </ul>
