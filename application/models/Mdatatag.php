@@ -28,7 +28,7 @@ class Mdatatag extends CI_Model
      */
     public function add($data, $tag)
     {
-        $query = 'INSERT INTO `data_tag`(`data`, `tag`, `timestamp`) VALUES (?, ?, CURRENT_TIMESTAMP)';
+        $query = 'INSERT INTO `data_tag`(`data`, `tag`) VALUES (?, ?)';
         $this->db->trans_start();
         foreach ($tag as $tv)
         {
@@ -37,23 +37,23 @@ class Mdatatag extends CI_Model
         $this->db->trans_complete();
     }
 
-    public function getLatestTimestamp()
-    {
-        $query = 'SELECT `timestamp` FROM `data_tag` ORDER BY `timestamp` DESC LIMIT 1';
-        $result = $this->db->query($query);
-        return $result->result_array();
-    }
+    /*    public function getLatestTimestamp()
+        {
+            $query = 'SELECT `timestamp` FROM `data_tag` ORDER BY `timestamp` DESC LIMIT 1';
+            $result = $this->db->query($query);
+            return $result->result_array();
+        }
 
-    public function getDataWithinBound($from, $to)
-    {
-        $query = 'SELECT `data`, `tag`, `timestamp` FROM `data_tag` WHERE `timestamp` > ? AND `timestamp` <= ?';
-        $result = $this->db->query($query, array($from, $to));
-        return $result->result_array();
-    }
+        public function getDataWithinBound($from, $to)
+        {
+            $query = 'SELECT `data`, `tag`, `timestamp` FROM `data_tag` WHERE `timestamp` > ? AND `timestamp` <= ?';
+            $result = $this->db->query($query, array($from, $to));
+            return $result->result_array();
+        }*/
 
     public function getAll()
     {
-        $query = 'SELECT `data`, `tag`, `timestamp` FROM `data_tag`';
+        $query = 'SELECT `data`, `tag` FROM `data_tag`';
         $result = $this->db->query($query);
         return $result->result_array();
     }

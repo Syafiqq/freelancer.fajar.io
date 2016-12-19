@@ -97,6 +97,10 @@
                                 <li>
                                     <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
                                 </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -110,7 +114,7 @@
                             <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
                                 <!-- The user image in the navbar-->
                                 <i class="fa fa-sign-out"></i>
-                                Sign Out
+                                &nbsp;&nbsp;Sign Out
                             </a>
                         </li>
                     </ul>

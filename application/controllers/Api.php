@@ -45,41 +45,17 @@ class Api extends CI_Controller
         {
             if (strcmp(strtolower($_SERVER['HTTP_X_REQUEST_ACCESS_CERTIFICATE']), 'cb2f4b3f8af65c661f71bef52cb80f4fd2590c0c7e45810573e93d4645cf0b8eca978af15b953dfbc5db2dda33ad66e02477f647e32b5b72a467e3b9f63bcb7e') === 0)
             {
-                $this->load->model('mtag');
-                $this->load->model('mdata');
-                $this->load->model('mdatatag');
-                $tagLatest = $this->mtag->getLatestTimestamp();
-                $datatagLatest = $this->mdata->getLatestTimestamp();
-                $dataLatest = $this->mdatatag->getLatestTimestamp();
-                $timestamps = array();
-                if (count($tagLatest) > 0)
+                $this->load->model('mversion');
+                $version = $this->mversion->getLatest();
+                if (count($version) > 0)
                 {
-                    array_push($timestamps, Carbon::createFromFormat('Y-m-d H:i:s', $tagLatest[0]['timestamp']));
-                    unset($tagLatest);
+                    $version = Carbon::createFromFormat('Y-m-d H:i:s', $version[0]['timestamp']);
                 }
-                if (count($datatagLatest) > 0)
+                else
                 {
-                    array_push($timestamps, Carbon::createFromFormat('Y-m-d H:i:s', $datatagLatest[0]['timestamp']));
-                    unset($datatagLatest);
+                    $version = Carbon::now();
                 }
-                if (count($dataLatest) > 0)
-                {
-                    array_push($timestamps, Carbon::createFromFormat('Y-m-d H:i:s', $dataLatest[0]['timestamp']));
-                    unset($dataLatest);
-                }
-                $timestamp = Carbon::now();
-                if (count($timestamps) > 0)
-                {
-                    $timestamp = Carbon::createFromFormat('Y-m-d H:i:s', '2000-01-01 00:00:00');
-                    foreach ($timestamps as $tms)
-                    {
-                        if ($timestamp->lt($tms))
-                        {
-                            $timestamp = $tms;
-                        }
-                    }
-                }
-                echo json_encode(array('code' => 200, 'message' => 'Accepted', 'data' => array('timestamp' => $timestamp->toDateTimeString())));
+                echo json_encode(array('code' => 200, 'message' => 'Accepted', 'data' => array('timestamp' => $version->toDateTimeString())));
             }
             else
             {
@@ -107,13 +83,16 @@ class Api extends CI_Controller
                         $this->load->model('mtag');
                         $this->load->model('mdata');
                         $this->load->model('mdatatag');
-                        $tag = $this->mtag->getDataWithinBound($_GET['from'], $_GET['to']);
-                        $data = $this->mdata->getDataWithinBound($_GET['from'], $_GET['to']);
+                        $this->load->model('mversion');
+                        $tag = $this->mtag->getAll();
+                        $data = $this->mdata->getAll();
                         $datatag = $this->mdatatag->getAll();
+                        $version = $this->mversion->getLatest();
                         echo json_encode(array('code' => 200, 'message' => 'Accepted', 'data' => array(
                             'tag' => $tag,
                             'data' => $data,
-                            'datatag' => $datatag
+                            'datatag' => $datatag,
+                            'version' => $version
                         )));
                     }
                     catch (InvalidArgumentException $ignored)
