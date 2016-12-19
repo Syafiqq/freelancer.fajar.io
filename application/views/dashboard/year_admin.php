@@ -78,7 +78,7 @@ if (!isset($data))
                 <p id="modal_status"></p>
             </div>
             <div class="modal-footer">
-                <button id="modal-do-delete" class="btn btn-danger pull-left" data-toggle="confirmation"
+                <button id="modal-do-delete" class="btn btn-danger pull-left" data-toggle="confirmation" data-singleton="true"
                         data-btn-ok-label="Ya" data-btn-ok-icon="glyphicon glyphicon-trash"
                         data-btn-ok-class="btn-danger"
                         data-btn-cancel-label="Tidak"
@@ -133,6 +133,10 @@ if (!isset($data))
                                 </li>
                                 <li>
                                     <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
                                 </li>
                             </ul>
                         </li>
