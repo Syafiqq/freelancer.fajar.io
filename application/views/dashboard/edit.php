@@ -128,7 +128,13 @@ if (!isset($data))
                             Dashboard
                         </a>
                     </li>
-                    <li class="active">Edit</li>
+                    <li>
+                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("dashboard/year?year={$data['year']}&category={$metadata['category']['id']}") ?>"><?php echo "Tahun-{$data['year']}" ?></a>
+                    </li>
+                    <li><?php echo $data['no'] ?></li>
                 </ol>
             </section>
 

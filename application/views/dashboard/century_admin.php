@@ -122,20 +122,21 @@ if (!isset($dataCount))
                     &nbsp;
                 </h1>
                 <ol class="breadcrumb">
-                    <li class="active">
+                    <li>
                         <a href="<?php echo site_url('dashboard') ?>">
                             <i class="fa fa-dashboard"></i>
                             Dashboard
                         </a>
                     </li>
+                    <li class="active"><?php echo strtoupper($metadata['category']['slug']) ?></li>
                 </ol>
             </section>
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-default">
+                <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tahun Undang Undang</h3>
+                        <h3 class="box-title"><?php echo $metadata['category']['name'] ?></h3>
                     </div>
                     <div class="box-body">
                         <?php
@@ -162,7 +163,7 @@ if (!isset($dataCount))
                                             echo "<td>{$key}</td>
                                                   <td>Tahun <strong>{$value['year']}</strong></td>
                                                   <td align='right'><strong>{$value['count']}</strong> Data</td>
-                                                  <td><button type=\"button\" action=\"" . site_url('dashboard/year?year=' . $value['year']) . "\" class=\"btn btn-go-year btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
+                                                  <td><button type=\"button\" action=\"" . site_url("dashboard/year?year={$value['year']}&category={$category}") . "\" class=\"btn btn-go-year btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
                                             echo '</tr>';
                                         }
                                         ?>
