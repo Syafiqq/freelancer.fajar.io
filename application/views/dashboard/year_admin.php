@@ -176,6 +176,9 @@ if (!isset($data))
                             Dashboard
                         </a>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
+                    </li>
                     <li class="active">Tahun</li>
                 </ol>
             </section>
@@ -184,7 +187,7 @@ if (!isset($data))
             <section class="content">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Undang Undang Tahun <?php echo $dataYear ?></h3>
+                        <h3 class="box-title"><?php echo "{$metadata['category']['name']} Tahun {$dataYear}" ?></h3>
                     </div>
                     <div class="box-body">
                         <?php

@@ -2,13 +2,14 @@
 /**
  * This <freelancer.fajar.io> project created by :
  * Name         : syafiq
- * Date / Time  : 10 December 2016, 10:42 PM.
+ * Date / Time  : 23 May 2017, 6:34 AM.
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-if (!isset($data))
+
+if (!isset($dataCount))
 {
-    $data = array();
+    $dataCount = array();
 }
 
 ?>
@@ -24,7 +25,7 @@ if (!isset($data))
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title><?php echo $data['no'] ?></title>
+    <title>Dashboard</title>
     <meta name="description" content="">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('/apple-touch-icon.png') ?>">
@@ -39,7 +40,6 @@ if (!isset($data))
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap-theme.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
-    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/select2/dist/css/select2.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
 
@@ -122,90 +122,49 @@ if (!isset($data))
                     &nbsp;
                 </h1>
                 <ol class="breadcrumb">
-                    <li>
+                    <li class="active">
                         <a href="<?php echo site_url('dashboard') ?>">
                             <i class="fa fa-dashboard"></i>
                             Dashboard
                         </a>
                     </li>
-                    <li>
-                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
-                    </li>
-                    <li>
-                        <a href="<?php echo site_url("dashboard/year?year={$data['year']}&category={$metadata['category']['id']}") ?>"><?php echo "Tahun-{$data['year']}" ?></a>
-                    </li>
-                    <li><?php echo $data['no'] ?></li>
                 </ol>
             </section>
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-default">
+                <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?php echo $data['no'] ?></h3>
+                        <h3 class="box-title">Peraturan</h3>
                     </div>
-                    <div class="box-body">
+                    <div class="box-body" style="padding: 16px;min-height: 400px">
                         <div class="row">
-                            <div class="col-md-10 col-md-offset-1">
-                                <form class="form-horizontal" id="uu_form_edit" action="<?php echo site_url('dashboard/do_edit?id=' . $data['id']) ?>" method="post">
-                                    <div class="box-body">
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Nomor</label>
-                                            <div class="col-sm-10">
-                                                <p class="form-control-static"><?php echo $data['no'] ?></p>
+                            <?php foreach ($categories as $ctg)
+                            {
+                                ?>
+                                <div class="col-md-4 col-sm-6 col-sx-12">
+                                    <div class="info-box bg-blue">
+                                    <span class="info-box-icon">
+                                        <i class="fa fa-fw fa-balance-scale"></i>
+                                    </span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text"><?php echo $ctg['name'] ?></span>
+                                            <span class="info-box-number"><?php echo $ctg['count'] ?> Data</span>
+                                            <!-- The progress section is optional -->
+                                            <div class="pull-right">
+                                                <button type="button" action="<?php echo site_url("dashboard/century?category={$ctg['id']}") ?>" class="btn btn-go-year btn-block btn-primary btn-xs">
+                                                    <i class="fa fa-search"></i>
+                                                    Detail
+                                                </button>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Tahun</label>
-                                            <div class="col-sm-10">
-                                                <p class="form-control-static"><?php echo $data['year'] ?></p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="story_main" class="col-sm-2 control-label">Tentang</label>
-                                            <div class="col-sm-10">
-                                                <textarea id="uu_description" name="description" class="form-control" rows="10" placeholder="Deskripsi"><?php echo $data['description'] ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="story_information" class="col-sm-2 control-label">Status</label>
-                                            <div class="col-sm-10">
-                                                <textarea id="uu_status" style="max-height: 160px" name="status" class="form-control" rows="3" placeholder="Status"><?php echo $data['status'] ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Label Pendukung</label>
-                                            <div class="col-sm-10">
-                                                <select name="tag" id="select_tag" class="form-control" multiple="multiple" data-placeholder="Pilih Label Pendukung" style="width: 100%;">
-                                                    <?php
-                                                    $tmp_st = count($data['tag']);
-                                                    $tmp_i = -1;
-                                                    $tmp_gate = (++$tmp_i < $tmp_st) ? true : false;
-                                                    foreach ($tags as $tag)
-                                                    {
-                                                        echo "<option value='{$tag['id']}'";
-                                                        if ($tmp_gate)
-                                                        {
-                                                            if ($tag['id'] == $data['tag'][$tmp_i]['id'])
-                                                            {
-                                                                echo 'selected';
-                                                                $tmp_gate = (++$tmp_i < $tmp_st) ? true : false;
-                                                            }
-                                                        }
-                                                        echo "><abbr title=\"{$tag['name']}\">{$tag['description']}</abbr></option>";
-                                                    } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.box-body -->
-                                    <div class="box-footer">
-                                        <button type="submit" class="btn btn-info pull-right">Save</button>
-                                    </div>
-                                    <!-- /.box-footer -->
-                                </form>
-                            </div>
+                                        </div><!-- /.info-box-content -->
+                                    </div><!-- /.info-box -->
+                                </div>
+                                <?php
+                            } ?>
                         </div>
+                    </div>
+                    <div class="box-footer">
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -234,7 +193,6 @@ if (!isset($data))
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js') ?>"></script>
 <script>window.jQuery || document.write('<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js')?>"><\/script>')</script>
 
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-serialize-object/dist/jquery.serialize-object.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
@@ -242,9 +200,7 @@ if (!isset($data))
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/fastclick/lib/fastclick.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/app.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/select2/dist/js/select2.full.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/ckeditor_4.6.1_basic/ckeditor.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/initializr/js/plugins.js') ?>"></script>
 <script type="text/javascript">
     (function ($)
@@ -312,82 +268,21 @@ if (!isset($data))
                             type: 'danger'
                         });
                     })
-
             });
 
-            $('select#select_tag').select2();
-
-            CKEDITOR.replace('uu_description');
-            CKEDITOR.replace('uu_status');
-
-            $("form#uu_form_edit").on('submit', function (event)
+            $("button.btn-go-year").on('click', function (event)
             {
                 event.preventDefault();
-                var form = $(this);
-                var data_sent = form.serializeObject();
-                data_sent['tag'] = $('select#select_tag').val();
-                data_sent['description'] = CKEDITOR.instances.uu_description.getData();
-                data_sent['status'] = CKEDITOR.instances.uu_status.getData();
-                $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: data_sent,
-                    dataType: 'json',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
-                })
-                    .done(function (data)
-                    {
-                        if (data.hasOwnProperty('data'))
-                        {
-                            if (data['data'].hasOwnProperty('notify'))
-                            {
-                                var notify = data['data']['notify'];
-                                for (var i = -1; ++i < notify.length;)
-                                {
-                                    $.notify({message: notify[i][0]}, {
-                                        type: notify[i][1],
-                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span style="color: black" data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
-                                    });
-                                }
-                            }
-                        }
-                        if (data.hasOwnProperty('code'))
-                        {
-                            if (data['code'] == 200)
-                            {
-                                setTimeout(function ()
-                                {
-                                    if (data.hasOwnProperty('redirect'))
-                                    {
-                                        location.href = data['redirect'];
-                                    }
-                                    else
-                                    {
-                                        location.href = window.location.protocol + '//' + window.location.host + '/dashboard'
-                                    }
-                                }, 2000);
-                            }
-                        }
+                location.href = $(this).attr('action');
+            });
 
-                    })
-                    .fail(function ()
-                    {
-                        $.notify({
-                            message: 'Error'
-                        }, {
-                            // settings
-                            type: 'danger'
-                        });
-                    })
+            $('table#uu_data').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
             });
         });
 

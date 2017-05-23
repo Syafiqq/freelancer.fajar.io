@@ -2,17 +2,10 @@
 /**
  * This <freelancer.fajar.io> project created by :
  * Name         : syafiq
- * Date / Time  : 10 December 2016, 10:42 PM.
+ * Date / Time  : 23 May 2017, 1:13 AM.
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
- */
-
-if (!isset($dataCount))
-{
-    $dataCount = array();
-}
-
-?>
+ */ ?>
 <!doctype html>
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -42,7 +35,6 @@ if (!isset($dataCount))
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
-
     <script src="<?php echo base_url('assets/frontend/bower_components/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') ?>"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -51,6 +43,7 @@ if (!isset($dataCount))
     <script src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/respond.min.js')?>"></script>
     <![endif]-->
 </head>
+
 <body class="hold-transition skin-blue layout-top-nav">
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an
@@ -71,39 +64,15 @@ if (!isset($dataCount))
                         Hukum
                     </a>
                 </div>
-                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-plus"></i>
-                                Tambah
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <li>
                             <!-- Menu Toggle Button -->
-                            <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
+                            <a id="sign-in" href="<?php echo site_url('auth/login') ?>">
                                 <!-- The user image in the navbar-->
-                                <i class="fa fa-sign-out"></i>
-                                &nbsp;&nbsp;Sign Out
+                                <i class="fa fa-sign-in"></i>
+                                &nbsp;&nbsp;Sign in
                             </a>
                         </li>
                     </ul>
@@ -122,13 +91,12 @@ if (!isset($dataCount))
                     &nbsp;
                 </h1>
                 <ol class="breadcrumb">
-                    <li>
+                    <li class="active">
                         <a href="<?php echo site_url('dashboard') ?>">
                             <i class="fa fa-dashboard"></i>
                             Dashboard
                         </a>
                     </li>
-                    <li class="active"><?php echo strtoupper($metadata['category']['slug']) ?></li>
                 </ol>
             </section>
 
@@ -136,62 +104,34 @@ if (!isset($dataCount))
             <section class="content">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?php echo $metadata['category']['name'] ?></h3>
+                        <h3 class="box-title">Peraturan</h3>
                     </div>
-                    <div class="box-body">
-                        <?php
-                        if (count($dataCount) > 0)
-                        {
-                            ?>
-                            <div class="row" style="min-height: 600px">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <table id="uu_data" class="table table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 48px">No</th>
-                                            <th>Tahun</th>
-                                            <th style="width: 120px">Status Hukum</th>
-                                            <th style="width: 80px">Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        foreach ($dataCount as $key => $value)
-                                        {
-                                            $key += 1;
-                                            echo '<tr>';
-                                            echo "<td>{$key}</td>
-                                                  <td>Tahun <strong>{$value['year']}</strong></td>
-                                                  <td align='right'><strong>{$value['count']}</strong> Data</td>
-                                                  <td><button type=\"button\" action=\"" . site_url("dashboard/year?year={$value['year']}&category={$category}") . "\" class=\"btn btn-go-year btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
-                                            echo '</tr>';
-                                        }
-                                        ?>
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tahun</th>
-                                            <th>Status Hukum</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
+                    <div class="box-body" style="padding: 16px;min-height: 400px">
+                        <div class="row">
+                            <?php foreach ($categories as $ctg)
+                            {
+                                ?>
+                                <div class="col-md-4 col-sm-6 col-sx-12">
+                                    <div class="info-box bg-blue">
+                                    <span class="info-box-icon">
+                                        <i class="fa fa-fw fa-balance-scale"></i>
+                                    </span>
+                                        <div class="info-box-content">
+                                            <span class="info-box-text"><?php echo $ctg['name'] ?></span>
+                                            <span class="info-box-number"><?php echo $ctg['count'] ?> Data</span>
+                                            <!-- The progress section is optional -->
+                                            <div class="pull-right">
+                                                <button type="button" action="<?php echo site_url("dashboard/century?category={$ctg['id']}") ?>" class="btn btn-go-year btn-block btn-primary btn-xs">
+                                                    <i class="fa fa-search"></i>
+                                                    Detail
+                                                </button>
+                                            </div>
+                                        </div><!-- /.info-box-content -->
+                                    </div><!-- /.info-box -->
                                 </div>
-                            </div>
-                            <?php
-                        }
-                        else
-                        {
-                            ?>
-                            <div class="row" style="height: 800px">
-                                <div class="col-md-12">
-                                    <h5 align="center">Tidak Ada Status Hukum yang dapat dimuat</h5>
-                                </div>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                                <?php
+                            } ?>
+                        </div>
                     </div>
                     <div class="box-footer">
                     </div>
@@ -239,66 +179,6 @@ if (!isset($dataCount))
          */
         $(function ()
         {
-            $("a#sign-out, a#versioning").on('click', function (event)
-            {
-                event.preventDefault();
-                $.ajax({
-                    type: 'post',
-                    url: $(this).attr('href'),
-                    dataType: 'json',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
-                })
-                    .done(function (data)
-                    {
-                        if (data.hasOwnProperty('data'))
-                        {
-                            if (data['data'].hasOwnProperty('notify'))
-                            {
-                                var notify = data['data']['notify'];
-                                for (var i = -1; ++i < notify.length;)
-                                {
-                                    $.notify({message: notify[i][0]}, {
-                                        type: notify[i][1],
-                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span style="color: black" data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
-                                    });
-                                }
-                            }
-                        }
-                        if (data.hasOwnProperty('code'))
-                        {
-                            if (data['code'] == 200)
-                            {
-                                setTimeout(function ()
-                                {
-                                    if (data.hasOwnProperty('redirect'))
-                                    {
-                                        location.href = data['redirect'];
-                                    }
-                                }, 2000);
-                            }
-                        }
-
-                    })
-                    .fail(function ()
-                    {
-                        $.notify({
-                            message: 'Error'
-                        }, {
-                            // settings
-                            type: 'danger'
-                        });
-                    })
-            });
-
             $("button.btn-go-year").on('click', function (event)
             {
                 event.preventDefault();

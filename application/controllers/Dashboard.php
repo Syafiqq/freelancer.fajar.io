@@ -39,21 +39,32 @@ class Dashboard extends CI_Controller
 
     public function index()
     {
-        $this->century();
+        $this->load->model('mdata');
+        $categories = $this->mdata->getCategoryCount();
+        if (isset($_SESSION['user']['profile']))
+        {
+            $this->load->view('dashboard/index_admin', array('year' => Carbon::now()->year, 'categories' => $categories));
+        }
+        else
+        {
+            $this->load->view('dashboard/index_free', array('year' => Carbon::now()->year, 'categories' => $categories));
+        }
     }
 
     public function century()
     {
         $this->load->model('mdata');
-        $result = $this->mdata->getCountPerYear();
+
+        $result = $this->mdata->getCountPerYear($_GET['category']);
+        $category = $this->mdata->findCategoryByID($_GET['category'])[0];
 
         if (isset($_SESSION['user']['profile']))
         {
-            $this->load->view('dashboard/century_admin', array('year' => Carbon::now()->year, 'dataCount' => $result));
+            $this->load->view('dashboard/century_admin', array('year' => Carbon::now()->year, 'dataCount' => $result, 'category' => $_GET['category'], 'metadata' => ['category' => $category]));
         }
         else
         {
-            $this->load->view('dashboard/century_free', array('year' => Carbon::now()->year, 'dataCount' => $result));
+            $this->load->view('dashboard/century_free', array('year' => Carbon::now()->year, 'dataCount' => $result, 'category' => $_GET['category'], 'metadata' => ['category' => $category]));
         }
     }
 
@@ -65,7 +76,8 @@ class Dashboard extends CI_Controller
         }
         $this->load->model('mdata');
         $this->load->model('mtag');
-        $result = $this->mdata->getDataNoAccordingToYear($_GET['year']);
+        $result = $this->mdata->getDataNoAccordingToYear($_GET['year'], $_GET['category']);
+        $category = $this->mdata->findCategoryByID($_GET['category'])[0];
         if (count($result) <= 0)
         {
             $result = array();
@@ -89,11 +101,11 @@ class Dashboard extends CI_Controller
 
         if (isset($_SESSION['user']['profile']))
         {
-            $this->load->view('dashboard/year_admin', array('year' => Carbon::now()->year, 'data' => $result, 'dataYear' => $_GET['year']));
+            $this->load->view('dashboard/year_admin', array('year' => Carbon::now()->year, 'data' => $result, 'dataYear' => $_GET['year'], 'metadata' => ['category' => $category]));
         }
         else
         {
-            $this->load->view('dashboard/year_free', array('year' => Carbon::now()->year, 'data' => $result, 'dataYear' => $_GET['year']));
+            $this->load->view('dashboard/year_free', array('year' => Carbon::now()->year, 'data' => $result, 'dataYear' => $_GET['year'], 'metadata' => ['category' => $category]));
         }
     }
 
@@ -110,9 +122,11 @@ class Dashboard extends CI_Controller
             $this->load->model('mdata');
             $result = $this->mdata->getData($_GET['id']);
             $tags = $this->mtag->getAll();
+            $category = [];
             if (count($result) > 0)
             {
                 $result = $result[0];
+                $category = $this->mdata->findCategoryByID($result['category'])[0];
                 $result['tag'] = $this->mtag->getIDFromDataTag($result['id']);
             }
             else
@@ -120,7 +134,7 @@ class Dashboard extends CI_Controller
                 $result = null;
             }
 
-            $this->load->view('dashboard/edit', array('year' => Carbon::now()->year, 'data' => $result, 'tags' => $tags));
+            $this->load->view('dashboard/edit', array('year' => Carbon::now()->year, 'data' => $result, 'tags' => $tags, 'metadata' => ['category' => $category]));
         }
         else
         {
@@ -180,6 +194,7 @@ class Dashboard extends CI_Controller
         if (count($result) <= 0)
         {
             redirect('dashboard/createtag');
+
             return;
         }
         $result = $result[0];
@@ -278,6 +293,7 @@ class Dashboard extends CI_Controller
                                     echo json_encode(array('code' => 401, 'message' => 'Invalid Data', 'data' => array('notify' => array(
                                         array('Invalid Data', 'danger')
                                     ))));
+
                                     return;
                                 }
                             }
@@ -403,6 +419,7 @@ class Dashboard extends CI_Controller
                             echo json_encode(array('code' => 401, 'message' => 'Invalid Data', 'data' => array('notify' => array(
                                 array('Invalid Data', 'danger')
                             ))));
+
                             return;
                         }
                     }
