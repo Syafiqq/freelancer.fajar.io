@@ -41,28 +41,28 @@ class Mdata extends CI_Model
 
     public function getAll()
     {
-        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `category` FROM `data` ORDER BY `id` ASC , `year` ASC ';
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `category`, `reference` FROM `data` ORDER BY `id` ASC , `year` ASC ';
         $result = $this->db->query($query);
         return $result->result_array();
     }
 
     public function getDataNoAccordingToYear($year, $category)
     {
-        $query = 'SELECT `data`.`id`, `data`.`year`, `data`.`no`, `data`.`category`, count(`data_tag`.`tag`) AS \'tag\' FROM `data` LEFT OUTER JOIN `data_tag` ON `data`.`id` = `data_tag`.`data`  WHERE `data`.`year` = ? AND `data`.`category` = ? GROUP BY `data`.`id` ORDER BY `data`.`id` ASC';
+        $query = 'SELECT `data`.`id`, `data`.`year`, `data`.`no`, `data`.`category`, `data`.`reference`, count(`data_tag`.`tag`) AS \'tag\' FROM `data` LEFT OUTER JOIN `data_tag` ON `data`.`id` = `data_tag`.`data`  WHERE `data`.`year` = ? AND `data`.`category` = ? GROUP BY `data`.`id` ORDER BY `data`.`id` ASC';
         $result = $this->db->query($query, [(int)$year, (int)$category]);
         return $result->result_array();
     }
 
     public function getData($id)
     {
-        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `category` FROM `data` WHERE `id` = ? LIMIT 1';
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `category`, `reference` FROM `data` WHERE `id` = ? LIMIT 1';
         $result = $this->db->query($query, array((int)$id));
         return $result->result_array();
     }
 
     public function getFromNoAndYear($no, $year)
     {
-        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `category` FROM `data` WHERE `no` = ? AND `year` = ? LIMIT 1';
+        $query = 'SELECT `id`, `year`, `no`, `description`, `status`, `category`, `reference` FROM `data` WHERE `no` = ? AND `year` = ? LIMIT 1';
         $result = $this->db->query($query, array($no, $year));
         return $result->result_array();
     }
