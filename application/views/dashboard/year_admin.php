@@ -87,10 +87,10 @@ if (!isset($data))
                     <i class="fa fa-trash"></i>
                     &nbsp;Delete Data
                 </button>
-                <!--                <button id="modal-do-delete" type="button" class="btn btn-danger pull-left" data-dismiss="modal">
-                                    <i class="fa fa-trash"></i>
-                                    &nbsp;Delete Data
-                                </button>-->
+                <a id="modal_source_download" class="btn btn-default" role="button" download>
+                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                    Download
+                </a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button id="modal-do-edit" type="button" class="btn btn-primary">
                     <i class="fa fa-pencil"></i>
@@ -387,6 +387,15 @@ if (!isset($data))
                                 $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
                                 $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
                                 $("button#modal-do-delete").attr('action', data['data'].hasOwnProperty('delete') ? data['data']['delete'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
+                                if (data['data']['result']['reference'] == null)
+                                {
+                                    $("a#modal_source_download").hide();
+                                }
+                                else
+                                {
+                                    $("a#modal_source_download").hide();
+                                    $("a#modal_source_download").attr('href', data['data']['result']['reference']);
+                                }
                                 $('#myModal').modal('show');
                             }
                             if (data['data'].hasOwnProperty('notify'))
