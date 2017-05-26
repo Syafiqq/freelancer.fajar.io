@@ -393,7 +393,7 @@ if (!isset($data))
                                 }
                                 else
                                 {
-                                    $("a#modal_source_download").show();
+                                    $("a#modal_source_download").hide();
                                     $("a#modal_source_download").attr('href', data['data']['result']['reference']);
                                 }
                                 $('#myModal').modal('show');
