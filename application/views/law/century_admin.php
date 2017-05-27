@@ -6,9 +6,10 @@
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-if (!isset($data))
+
+if (!isset($dataCount))
 {
-    $data = array();
+    $dataCount = array();
 }
 
 ?>
@@ -24,7 +25,7 @@ if (!isset($data))
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>UU Tahun <?php echo $dataYear ?></title>
+    <title>Dashboard</title>
     <meta name="description" content="">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('/apple-touch-icon.png') ?>">
@@ -51,55 +52,6 @@ if (!isset($data))
     <![endif]-->
 </head>
 <body class="hold-transition skin-blue layout-top-nav">
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="modal_title_no" style="font-weight: bold">New message</h4>
-            </div>
-            <div class=modal-body>
-                <h4>
-                    <strong>Nomor</strong>
-                </h4>
-                <p id="modal_no">UU xx.xx.xxx</p>
-                <hr>
-                <h4>
-                    <strong>Tentang</strong>
-                </h4>
-                <p id="modal_deskripsi"></p>
-                <hr>
-                <h4>
-                    <strong>Status</strong>
-                </h4>
-                <p id="modal_status"></p>
-            </div>
-            <div class="modal-footer">
-                <button id="modal-do-delete" class="btn btn-danger pull-left" data-toggle="confirmation" data-singleton="true"
-                        data-btn-ok-label="Ya" data-btn-ok-icon="glyphicon glyphicon-trash"
-                        data-btn-ok-class="btn-danger"
-                        data-btn-cancel-label="Tidak"
-                        data-btn-cancel-class="btn-success" data-btn-cancel-icon="glyphicon glyphicon-ok"
-                        data-title="Hapus Status Hukum" data-content="Hapus Status Hukum Ini ?">
-                    <i class="fa fa-trash"></i>
-                    &nbsp;Delete Data
-                </button>
-                <a id="modal_source_download" class="btn btn-default" role="button" download>
-                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                    Download
-                </a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="modal-do-edit" type="button" class="btn btn-primary">
-                    <i class="fa fa-pencil"></i>
-                    &nbsp;Edit Data
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an
     <strong>outdated</strong>
@@ -122,21 +74,39 @@ if (!isset($data))
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="<?php echo site_url('law/create') ?>">
+                                <!-- The user image in the navbar-->
                                 <i class="fa fa-plus"></i>
-                                Tambah
+                                &nbsp;&nbsp;Status Hukum
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Tag
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                    <a href="<?php echo site_url('tag/create') ?>">Tambah</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                    <a href="<?php echo site_url('tag') ?>">Modifikasi</a>
                                 </li>
-                                <li class="divider"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Kategori
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
+                                    <a href="<?php echo site_url('category/create') ?>">Tambah</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('category') ?>">Modifikasi</a>
                                 </li>
                             </ul>
                         </li>
@@ -176,22 +146,19 @@ if (!isset($data))
                             Dashboard
                         </a>
                     </li>
-                    <li>
-                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
-                    </li>
-                    <li class="active">Tahun</li>
+                    <li class="active"><?php echo strtoupper($metadata['category']['slug']) ?></li>
                 </ol>
             </section>
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-default">
+                <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?php echo "{$metadata['category']['name']} Tahun {$dataYear}" ?></h3>
+                        <h3 class="box-title"><?php echo $metadata['category']['name'] ?></h3>
                     </div>
                     <div class="box-body">
                         <?php
-                        if (count($data) > 0)
+                        if (count($dataCount) > 0)
                         {
                             ?>
                             <div class="row" style="min-height: 600px">
@@ -200,23 +167,21 @@ if (!isset($data))
                                         <thead>
                                         <tr>
                                             <th style="width: 48px">No</th>
-                                            <th style="width: 60px">Tahun</th>
-                                            <th>Nomor</th>
+                                            <th>Tahun</th>
+                                            <th style="width: 120px">Status Hukum</th>
                                             <th style="width: 80px">Detail</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <?php
-                                        foreach ($data as $key => $value)
+                                        foreach ($dataCount as $key => $value)
                                         {
                                             $key += 1;
                                             echo '<tr>';
-                                            echo "<td>{$key}</td><td>{$value['year']}</td><td>{$value['no']}";
-                                            foreach ($value['tag'] as $vt)
-                                            {
-                                                echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
-                                            }
-                                            echo "</td><td><button type=\"button\" action=\"" . site_url('dashboard/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
+                                            echo "<td>{$key}</td>
+                                                  <td>Tahun <strong>{$value['year']}</strong></td>
+                                                  <td align='right'><strong>{$value['count']}</strong> Data</td>
+                                                  <td><button type=\"button\" action=\"" . site_url("law/year?year={$value['year']}&category={$category}") . "\" class=\"btn btn-go-year btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
                                             echo '</tr>';
                                         }
                                         ?>
@@ -225,7 +190,7 @@ if (!isset($data))
                                         <tr>
                                             <th>No</th>
                                             <th>Tahun</th>
-                                            <th>No Undang Undang</th>
+                                            <th>Status Hukum</th>
                                             <th>Detail</th>
                                         </tr>
                                         </tfoot>
@@ -239,12 +204,14 @@ if (!isset($data))
                             ?>
                             <div class="row" style="height: 800px">
                                 <div class="col-md-12">
-                                    <h5 align="center">Tidak Terdapat Undang Undang Pada Tahun Ini</h5>
+                                    <h5 align="center">Tidak Ada Status Hukum yang dapat dimuat</h5>
                                 </div>
                             </div>
                             <?php
                         }
                         ?>
+                    </div>
+                    <div class="box-footer">
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -275,7 +242,6 @@ if (!isset($data))
 
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-confirmation2/bootstrap-confirmation.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/dataTables.bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
@@ -291,7 +257,7 @@ if (!isset($data))
          */
         $(function ()
         {
-            $("a#sign-out").on('click', function (event)
+            $("a#sign-out, a#versioning").on('click', function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -351,147 +317,10 @@ if (!isset($data))
                     })
             });
 
-            $("button#modal-do-edit").on('click', function (event)
+            $("button.btn-go-year").on('click', function (event)
             {
                 event.preventDefault();
                 location.href = $(this).attr('action');
-            });
-
-            $("button.btn-go-detail").on('click', function (event)
-            {
-                event.preventDefault();
-                $.ajax({
-                    type: 'post',
-                    url: $(this).attr('action'),
-                    dataType: 'json',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
-                })
-                    .done(function (data)
-                    {
-                        if (data.hasOwnProperty('data'))
-                        {
-                            if (data['data'].hasOwnProperty('result'))
-                            {
-                                $("p#modal_deskripsi").text("");
-                                $("p#modal_status").text("");
-                                $("h4#modal_title_no").text(data['data']['result']['no']);
-                                $("p#modal_no").text(data['data']['result']['no']);
-                                if (data['data']['result'].hasOwnProperty('tag'))
-                                {
-                                    for (var ti = -1, ts = data['data']['result']['tag'].length; ++ti < ts;)
-                                    {
-                                        $("p#modal_no").append("&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + data['data']['result']['tag'][ti]['color'] + "; color: #" + data['data']['result']['tag'][ti]['colortext'] + "\"><abbr title=\"" + data['data']['result']['tag'][ti]['description'] + "\">" + data['data']['result']['tag'][ti]['name'] + "</abbr></span>");
-                                    }
-                                }
-                                $("p#modal_deskripsi").append(data['data']['result']['description']);
-                                $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
-                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
-                                $("button#modal-do-delete").attr('action', data['data'].hasOwnProperty('delete') ? data['data']['delete'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
-                                if (data['data']['result']['reference'] == null)
-                                {
-                                    $("a#modal_source_download").hide();
-                                }
-                                else
-                                {
-                                    $("a#modal_source_download").hide();
-                                    $("a#modal_source_download").attr('href', data['data']['result']['reference']);
-                                }
-                                $('#myModal').modal('show');
-                            }
-                            if (data['data'].hasOwnProperty('notify'))
-                            {
-                                var notify = data['data']['notify'];
-                                for (var i = -1; ++i < notify.length;)
-                                {
-                                    $.notify({message: notify[i][0]}, {
-                                        type: notify[i][1],
-                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span style="color: black" data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
-                                    });
-                                }
-                            }
-                        }
-                    })
-                    .fail(function ()
-                    {
-                        $.notify({
-                            message: 'Error'
-                        }, {
-                            // settings
-                            type: 'danger'
-                        });
-                    });
-            });
-
-            $('button#modal-do-delete').confirmation({
-                popout: true,
-                rootSelector: 'button#modal-do-delete',
-                container: 'body',
-                onConfirm: function ()
-                {
-                    event.preventDefault();
-                    $.ajax({
-                        type: 'post',
-                        url: $(this).attr('action'),
-                        dataType: 'json',
-                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
-                    })
-                        .done(function (data)
-                        {
-                            if (data.hasOwnProperty('data'))
-                            {
-                                if (data['data'].hasOwnProperty('notify'))
-                                {
-                                    var notify = data['data']['notify'];
-                                    for (var i = -1; ++i < notify.length;)
-                                    {
-                                        $.notify({message: notify[i][0]}, {
-                                            type: notify[i][1],
-                                            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                            '<span data-notify="icon"></span> ' +
-                                            '<span data-notify="title">{1}</span> ' +
-                                            '<span style="color: black" data-notify="message">{2}</span>' +
-                                            '<div class="progress" data-notify="progressbar">' +
-                                            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                            '</div>' +
-                                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                            '</div>'
-                                        });
-                                    }
-                                }
-                            }
-                            if (data.hasOwnProperty('code'))
-                            {
-                                if (data['code'] == 200)
-                                {
-                                    setTimeout(function ()
-                                    {
-                                        location.reload();
-                                    }, 2000);
-                                }
-                            }
-
-                        })
-                        .fail(function ()
-                        {
-                            $.notify({
-                                message: 'Error'
-                            }, {
-                                // settings
-                                type: 'danger'
-                            });
-                        })
-
-                }
             });
 
             $('table#uu_data').DataTable({

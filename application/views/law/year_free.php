@@ -136,7 +136,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
+                        <a href="<?php echo site_url("law/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
                     </li>
                     <li class="active">Tahun</li>
                 </ol>
@@ -175,7 +175,7 @@
                                             {
                                                 echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
                                             }
-                                            echo "</td><td><button type=\"button\" action=\"" . site_url('dashboard/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
+                                            echo "</td><td><button type=\"button\" action=\"" . site_url('law/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
                                             echo '</tr>';
                                         }
                                         ?>
@@ -184,7 +184,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Tahun</th>
-                                            <th>No Undang Undang</th>
+                                            <th>Nomor</th>
                                             <th>Detail</th>
                                         </tr>
                                         </tfoot>
@@ -277,14 +277,14 @@
                                 }
                                 $("p#modal_deskripsi").append(data['data']['result']['description']);
                                 $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
-                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
+                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('law/year?year=' . $dataYear)?>');
                                 if (data['data']['result']['reference'] == null)
                                 {
                                     $("a#modal_source_download").hide();
                                 }
                                 else
                                 {
-                                    $("a#modal_source_download").hide();
+                                    $("a#modal_source_download").show();
                                     $("a#modal_source_download").attr('href', data['data']['result']['reference']);
                                 }
                                 $('#myModal').modal('show');
