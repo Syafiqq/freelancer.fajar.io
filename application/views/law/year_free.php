@@ -6,11 +6,6 @@
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-if (!isset($data))
-{
-    $data = array();
-}
-
 ?>
 <!doctype html>
 <!--[if lt IE 7]>
@@ -78,24 +73,11 @@ if (!isset($data))
                 <p id="modal_status"></p>
             </div>
             <div class="modal-footer">
-                <button id="modal-do-delete" class="btn btn-danger pull-left" data-toggle="confirmation" data-singleton="true"
-                        data-btn-ok-label="Ya" data-btn-ok-icon="glyphicon glyphicon-trash"
-                        data-btn-ok-class="btn-danger"
-                        data-btn-cancel-label="Tidak"
-                        data-btn-cancel-class="btn-success" data-btn-cancel-icon="glyphicon glyphicon-ok"
-                        data-title="Hapus Status Hukum" data-content="Hapus Status Hukum Ini ?">
-                    <i class="fa fa-trash"></i>
-                    &nbsp;Delete Data
-                </button>
                 <a id="modal_source_download" class="btn btn-default" role="button" download>
                     <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
                     Download
                 </a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button id="modal-do-edit" type="button" class="btn btn-primary">
-                    <i class="fa fa-pencil"></i>
-                    &nbsp;Edit Data
-                </button>
             </div>
         </div>
     </div>
@@ -119,39 +101,16 @@ if (!isset($data))
                         Hukum
                     </a>
                 </div>
-                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-plus"></i>
-                                Tambah
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
 
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <li>
                             <!-- Menu Toggle Button -->
-                            <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
+                            <a id="sign-in" href="<?php echo site_url('auth/login') ?>">
                                 <!-- The user image in the navbar-->
-                                <i class="fa fa-sign-out"></i>
-                                &nbsp;&nbsp;Sign Out
+                                <i class="fa fa-sign-in"></i>
+                                &nbsp;&nbsp;Sign in
                             </a>
                         </li>
                     </ul>
@@ -177,7 +136,7 @@ if (!isset($data))
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
+                        <a href="<?php echo site_url("law/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
                     </li>
                     <li class="active">Tahun</li>
                 </ol>
@@ -216,7 +175,7 @@ if (!isset($data))
                                             {
                                                 echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
                                             }
-                                            echo "</td><td><button type=\"button\" action=\"" . site_url('dashboard/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
+                                            echo "</td><td><button type=\"button\" action=\"" . site_url('law/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
                                             echo '</tr>';
                                         }
                                         ?>
@@ -225,7 +184,7 @@ if (!isset($data))
                                         <tr>
                                             <th>No</th>
                                             <th>Tahun</th>
-                                            <th>No Undang Undang</th>
+                                            <th>Nomor</th>
                                             <th>Detail</th>
                                         </tr>
                                         </tfoot>
@@ -275,7 +234,6 @@ if (!isset($data))
 
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-confirmation2/bootstrap-confirmation.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/dataTables.bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
@@ -291,72 +249,6 @@ if (!isset($data))
          */
         $(function ()
         {
-            $("a#sign-out").on('click', function (event)
-            {
-                event.preventDefault();
-                $.ajax({
-                    type: 'post',
-                    url: $(this).attr('href'),
-                    dataType: 'json',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
-                })
-                    .done(function (data)
-                    {
-                        if (data.hasOwnProperty('data'))
-                        {
-                            if (data['data'].hasOwnProperty('notify'))
-                            {
-                                var notify = data['data']['notify'];
-                                for (var i = -1; ++i < notify.length;)
-                                {
-                                    $.notify({message: notify[i][0]}, {
-                                        type: notify[i][1],
-                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span style="color: black" data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
-                                    });
-                                }
-                            }
-                        }
-                        if (data.hasOwnProperty('code'))
-                        {
-                            if (data['code'] == 200)
-                            {
-                                setTimeout(function ()
-                                {
-                                    if (data.hasOwnProperty('redirect'))
-                                    {
-                                        location.href = data['redirect'];
-                                    }
-                                }, 2000);
-                            }
-                        }
-
-                    })
-                    .fail(function ()
-                    {
-                        $.notify({
-                            message: 'Error'
-                        }, {
-                            // settings
-                            type: 'danger'
-                        });
-                    })
-            });
-
-            $("button#modal-do-edit").on('click', function (event)
-            {
-                event.preventDefault();
-                location.href = $(this).attr('action');
-            });
-
             $("button.btn-go-detail").on('click', function (event)
             {
                 event.preventDefault();
@@ -385,15 +277,14 @@ if (!isset($data))
                                 }
                                 $("p#modal_deskripsi").append(data['data']['result']['description']);
                                 $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
-                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
-                                $("button#modal-do-delete").attr('action', data['data'].hasOwnProperty('delete') ? data['data']['delete'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
+                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('law/year?year=' . $dataYear)?>');
                                 if (data['data']['result']['reference'] == null)
                                 {
                                     $("a#modal_source_download").hide();
                                 }
                                 else
                                 {
-                                    $("a#modal_source_download").hide();
+                                    $("a#modal_source_download").show();
                                     $("a#modal_source_download").attr('href', data['data']['result']['reference']);
                                 }
                                 $('#myModal').modal('show');
@@ -429,69 +320,6 @@ if (!isset($data))
                             type: 'danger'
                         });
                     });
-            });
-
-            $('button#modal-do-delete').confirmation({
-                popout: true,
-                rootSelector: 'button#modal-do-delete',
-                container: 'body',
-                onConfirm: function ()
-                {
-                    event.preventDefault();
-                    $.ajax({
-                        type: 'post',
-                        url: $(this).attr('action'),
-                        dataType: 'json',
-                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
-                    })
-                        .done(function (data)
-                        {
-                            if (data.hasOwnProperty('data'))
-                            {
-                                if (data['data'].hasOwnProperty('notify'))
-                                {
-                                    var notify = data['data']['notify'];
-                                    for (var i = -1; ++i < notify.length;)
-                                    {
-                                        $.notify({message: notify[i][0]}, {
-                                            type: notify[i][1],
-                                            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                            '<span data-notify="icon"></span> ' +
-                                            '<span data-notify="title">{1}</span> ' +
-                                            '<span style="color: black" data-notify="message">{2}</span>' +
-                                            '<div class="progress" data-notify="progressbar">' +
-                                            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                            '</div>' +
-                                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                            '</div>'
-                                        });
-                                    }
-                                }
-                            }
-                            if (data.hasOwnProperty('code'))
-                            {
-                                if (data['code'] == 200)
-                                {
-                                    setTimeout(function ()
-                                    {
-                                        location.reload();
-                                    }, 2000);
-                                }
-                            }
-
-                        })
-                        .fail(function ()
-                        {
-                            $.notify({
-                                message: 'Error'
-                            }, {
-                                // settings
-                                type: 'danger'
-                            });
-                        })
-
-                }
             });
 
             $('table#uu_data').DataTable({

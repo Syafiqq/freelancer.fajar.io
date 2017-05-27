@@ -24,7 +24,7 @@ if (!isset($data))
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title><?php echo $data['no'] ?></title>
+    <title>UU Tahun <?php echo $dataYear ?></title>
     <meta name="description" content="">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('/apple-touch-icon.png') ?>">
@@ -39,7 +39,6 @@ if (!isset($data))
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap-theme.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
-    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/select2/dist/css/select2.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
 
@@ -52,6 +51,55 @@ if (!isset($data))
     <![endif]-->
 </head>
 <body class="hold-transition skin-blue layout-top-nav">
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modal_title_no" style="font-weight: bold">New message</h4>
+            </div>
+            <div class=modal-body>
+                <h4>
+                    <strong>Nomor</strong>
+                </h4>
+                <p id="modal_no">UU xx.xx.xxx</p>
+                <hr>
+                <h4>
+                    <strong>Tentang</strong>
+                </h4>
+                <p id="modal_deskripsi"></p>
+                <hr>
+                <h4>
+                    <strong>Status</strong>
+                </h4>
+                <p id="modal_status"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-do-delete" class="btn btn-danger pull-left" data-toggle="confirmation" data-singleton="true"
+                        data-btn-ok-label="Ya" data-btn-ok-icon="glyphicon glyphicon-trash"
+                        data-btn-ok-class="btn-danger"
+                        data-btn-cancel-label="Tidak"
+                        data-btn-cancel-class="btn-success" data-btn-cancel-icon="glyphicon glyphicon-ok"
+                        data-title="Hapus Status Hukum" data-content="Hapus Status Hukum Ini ?">
+                    <i class="fa fa-trash"></i>
+                    &nbsp;Delete Data
+                </button>
+                <a id="modal_source_download" class="btn btn-default" role="button" download>
+                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                    Download
+                </a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="modal-do-edit" type="button" class="btn btn-primary">
+                    <i class="fa fa-pencil"></i>
+                    &nbsp;Edit Data
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an
     <strong>outdated</strong>
@@ -74,21 +122,39 @@ if (!isset($data))
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="<?php echo site_url('law/create') ?>">
+                                <!-- The user image in the navbar-->
                                 <i class="fa fa-plus"></i>
-                                Tambah
+                                &nbsp;&nbsp;Status Hukum
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Tag
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                    <a href="<?php echo site_url('tag/create') ?>">Tambah</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                    <a href="<?php echo site_url('tag') ?>">Modifikasi</a>
                                 </li>
-                                <li class="divider"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Kategori
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
+                                    <a href="<?php echo site_url('category/create') ?>">Tambah</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('category') ?>">Modifikasi</a>
                                 </li>
                             </ul>
                         </li>
@@ -129,12 +195,9 @@ if (!isset($data))
                         </a>
                     </li>
                     <li>
-                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
+                        <a href="<?php echo site_url("law/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
                     </li>
-                    <li>
-                        <a href="<?php echo site_url("dashboard/year?year={$data['year']}&category={$metadata['category']['id']}") ?>"><?php echo "Tahun-{$data['year']}" ?></a>
-                    </li>
-                    <li><?php echo $data['no'] ?></li>
+                    <li class="active">Tahun</li>
                 </ol>
             </section>
 
@@ -142,70 +205,64 @@ if (!isset($data))
             <section class="content">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?php echo $data['no'] ?></h3>
+                        <h3 class="box-title"><?php echo "{$metadata['category']['name']} Tahun {$dataYear}" ?></h3>
                     </div>
                     <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-10 col-md-offset-1">
-                                <form class="form-horizontal" id="uu_form_edit" action="<?php echo site_url('dashboard/do_edit?id=' . $data['id']) ?>" method="post">
-                                    <div class="box-body">
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Nomor</label>
-                                            <div class="col-sm-10">
-                                                <p class="form-control-static"><?php echo $data['no'] ?></p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Tahun</label>
-                                            <div class="col-sm-10">
-                                                <p class="form-control-static"><?php echo $data['year'] ?></p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="story_main" class="col-sm-2 control-label">Tentang</label>
-                                            <div class="col-sm-10">
-                                                <textarea id="uu_description" name="description" class="form-control" rows="10" placeholder="Deskripsi"><?php echo $data['description'] ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="story_information" class="col-sm-2 control-label">Status</label>
-                                            <div class="col-sm-10">
-                                                <textarea id="uu_status" style="max-height: 160px" name="status" class="form-control" rows="3" placeholder="Status"><?php echo $data['status'] ?></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Label Pendukung</label>
-                                            <div class="col-sm-10">
-                                                <select name="tag" id="select_tag" class="form-control" multiple="multiple" data-placeholder="Pilih Label Pendukung" style="width: 100%;">
-                                                    <?php
-                                                    $tmp_st = count($data['tag']);
-                                                    $tmp_i = -1;
-                                                    $tmp_gate = (++$tmp_i < $tmp_st) ? true : false;
-                                                    foreach ($tags as $tag)
-                                                    {
-                                                        echo "<option value='{$tag['id']}'";
-                                                        if ($tmp_gate)
-                                                        {
-                                                            if ($tag['id'] == $data['tag'][$tmp_i]['id'])
-                                                            {
-                                                                echo 'selected';
-                                                                $tmp_gate = (++$tmp_i < $tmp_st) ? true : false;
-                                                            }
-                                                        }
-                                                        echo "><abbr title=\"{$tag['name']}\">{$tag['description']}</abbr></option>";
-                                                    } ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.box-body -->
-                                    <div class="box-footer">
-                                        <button type="submit" class="btn btn-info pull-right">Save</button>
-                                    </div>
-                                    <!-- /.box-footer -->
-                                </form>
+                        <?php
+                        if (count($data) > 0)
+                        {
+                            ?>
+                            <div class="row" style="min-height: 600px">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <table id="uu_data" class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 48px">No</th>
+                                            <th style="width: 60px">Tahun</th>
+                                            <th>Nomor</th>
+                                            <th style="width: 80px">Detail</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        foreach ($data as $key => $value)
+                                        {
+                                            $key += 1;
+                                            echo '<tr>';
+                                            echo "<td>{$key}</td><td>{$value['year']}</td><td>{$value['no']}";
+                                            foreach ($value['tag'] as $vt)
+                                            {
+                                                echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
+                                            }
+                                            echo "</td><td><button type=\"button\" action=\"" . site_url('law/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
+                                            echo '</tr>';
+                                        }
+                                        ?>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Tahun</th>
+                                            <th>Nomor</th>
+                                            <th>Detail</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
+                            <?php
+                        }
+                        else
+                        {
+                            ?>
+                            <div class="row" style="height: 800px">
+                                <div class="col-md-12">
+                                    <h5 align="center">Tidak Terdapat Undang Undang Pada Tahun Ini</h5>
+                                </div>
+                            </div>
+                            <?php
+                        }
+                        ?>
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -234,17 +291,15 @@ if (!isset($data))
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js') ?>"></script>
 <script>window.jQuery || document.write('<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js')?>"><\/script>')</script>
 
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-serialize-object/dist/jquery.serialize-object.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-confirmation2/bootstrap-confirmation.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/dataTables.bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/fastclick/lib/fastclick.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/app.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/select2/dist/js/select2.full.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/ckeditor_4.6.1_basic/ckeditor.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/initializr/js/plugins.js') ?>"></script>
 <script type="text/javascript">
     (function ($)
@@ -254,7 +309,7 @@ if (!isset($data))
          */
         $(function ()
         {
-            $("a#sign-out, a#versioning").on('click', function (event)
+            $("a#sign-out").on('click', function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -312,26 +367,20 @@ if (!isset($data))
                             type: 'danger'
                         });
                     })
-
             });
 
-            $('select#select_tag').select2();
-
-            CKEDITOR.replace('uu_description');
-            CKEDITOR.replace('uu_status');
-
-            $("form#uu_form_edit").on('submit', function (event)
+            $("button#modal-do-edit").on('click', function (event)
             {
                 event.preventDefault();
-                var form = $(this);
-                var data_sent = form.serializeObject();
-                data_sent['tag'] = $('select#select_tag').val();
-                data_sent['description'] = CKEDITOR.instances.uu_description.getData();
-                data_sent['status'] = CKEDITOR.instances.uu_status.getData();
+                location.href = $(this).attr('action');
+            });
+
+            $("button.btn-go-detail").on('click', function (event)
+            {
+                event.preventDefault();
                 $.ajax({
-                    type: form.attr('method'),
-                    url: form.attr('action'),
-                    data: data_sent,
+                    type: 'post',
+                    url: $(this).attr('action'),
                     dataType: 'json',
                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
                 })
@@ -339,6 +388,34 @@ if (!isset($data))
                     {
                         if (data.hasOwnProperty('data'))
                         {
+                            if (data['data'].hasOwnProperty('result'))
+                            {
+                                $("p#modal_deskripsi").text("");
+                                $("p#modal_status").text("");
+                                $("h4#modal_title_no").text(data['data']['result']['no']);
+                                $("p#modal_no").text(data['data']['result']['no']);
+                                if (data['data']['result'].hasOwnProperty('tag'))
+                                {
+                                    for (var ti = -1, ts = data['data']['result']['tag'].length; ++ti < ts;)
+                                    {
+                                        $("p#modal_no").append("&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + data['data']['result']['tag'][ti]['color'] + "; color: #" + data['data']['result']['tag'][ti]['colortext'] + "\"><abbr title=\"" + data['data']['result']['tag'][ti]['description'] + "\">" + data['data']['result']['tag'][ti]['name'] + "</abbr></span>");
+                                    }
+                                }
+                                $("p#modal_deskripsi").append(data['data']['result']['description']);
+                                $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
+                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('law/year?year=' . $dataYear)?>');
+                                $("button#modal-do-delete").attr('action', data['data'].hasOwnProperty('delete') ? data['data']['delete'] : '<?php echo site_url('law/year?year=' . $dataYear)?>');
+                                if (data['data']['result']['reference'] == null)
+                                {
+                                    $("a#modal_source_download").hide();
+                                }
+                                else
+                                {
+                                    $("a#modal_source_download").show();
+                                    $("a#modal_source_download").attr('href', data['data']['result']['reference']);
+                                }
+                                $('#myModal').modal('show');
+                            }
                             if (data['data'].hasOwnProperty('notify'))
                             {
                                 var notify = data['data']['notify'];
@@ -360,24 +437,6 @@ if (!isset($data))
                                 }
                             }
                         }
-                        if (data.hasOwnProperty('code'))
-                        {
-                            if (data['code'] == 200)
-                            {
-                                setTimeout(function ()
-                                {
-                                    if (data.hasOwnProperty('redirect'))
-                                    {
-                                        location.href = data['redirect'];
-                                    }
-                                    else
-                                    {
-                                        location.href = window.location.protocol + '//' + window.location.host + '/dashboard'
-                                    }
-                                }, 2000);
-                            }
-                        }
-
                     })
                     .fail(function ()
                     {
@@ -387,7 +446,79 @@ if (!isset($data))
                             // settings
                             type: 'danger'
                         });
+                    });
+            });
+
+            $('button#modal-do-delete').confirmation({
+                popout: true,
+                rootSelector: 'button#modal-do-delete',
+                container: 'body',
+                onConfirm: function ()
+                {
+                    event.preventDefault();
+                    $.ajax({
+                        type: 'post',
+                        url: $(this).attr('action'),
+                        dataType: 'json',
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
                     })
+                        .done(function (data)
+                        {
+                            if (data.hasOwnProperty('data'))
+                            {
+                                if (data['data'].hasOwnProperty('notify'))
+                                {
+                                    var notify = data['data']['notify'];
+                                    for (var i = -1; ++i < notify.length;)
+                                    {
+                                        $.notify({message: notify[i][0]}, {
+                                            type: notify[i][1],
+                                            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                            '<span data-notify="icon"></span> ' +
+                                            '<span data-notify="title">{1}</span> ' +
+                                            '<span style="color: black" data-notify="message">{2}</span>' +
+                                            '<div class="progress" data-notify="progressbar">' +
+                                            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                                            '</div>' +
+                                            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                                            '</div>'
+                                        });
+                                    }
+                                }
+                            }
+                            if (data.hasOwnProperty('code'))
+                            {
+                                if (data['code'] == 200)
+                                {
+                                    setTimeout(function ()
+                                    {
+                                        location.reload();
+                                    }, 2000);
+                                }
+                            }
+
+                        })
+                        .fail(function ()
+                        {
+                            $.notify({
+                                message: 'Error'
+                            }, {
+                                // settings
+                                type: 'danger'
+                            });
+                        })
+
+                }
+            });
+
+            $('table#uu_data').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
             });
         });
 
