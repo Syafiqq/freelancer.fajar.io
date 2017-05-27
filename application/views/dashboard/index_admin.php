@@ -74,21 +74,39 @@ if (!isset($dataCount))
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="<?php echo site_url('law/create') ?>">
+                                <!-- The user image in the navbar-->
                                 <i class="fa fa-plus"></i>
-                                Tambah
+                                &nbsp;&nbsp;Status Hukum
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Tag
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                    <a href="<?php echo site_url('tag/create') ?>">Tambah</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                    <a href="<?php echo site_url('tag') ?>">Modifikasi</a>
                                 </li>
-                                <li class="divider"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Kategori
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
+                                    <a href="<?php echo site_url('category/create') ?>">Tambah</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('category') ?>">Modifikasi</a>
                                 </li>
                             </ul>
                         </li>
@@ -152,7 +170,7 @@ if (!isset($dataCount))
                                             <span class="info-box-number"><?php echo $ctg['count'] ?> Data</span>
                                             <!-- The progress section is optional -->
                                             <div class="pull-right">
-                                                <button type="button" action="<?php echo site_url("dashboard/century?category={$ctg['id']}") ?>" class="btn btn-go-year btn-block btn-primary btn-xs">
+                                                <button type="button" action="<?php echo site_url("law/century?category={$ctg['id']}") ?>" class="btn btn-go-year btn-block btn-primary btn-xs">
                                                     <i class="fa fa-search"></i>
                                                     Detail
                                                 </button>

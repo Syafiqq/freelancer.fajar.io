@@ -121,7 +121,7 @@
                                             <span class="info-box-number"><?php echo $ctg['count'] ?> Data</span>
                                             <!-- The progress section is optional -->
                                             <div class="pull-right">
-                                                <button type="button" action="<?php echo site_url("dashboard/century?category={$ctg['id']}") ?>" class="btn btn-go-year btn-block btn-primary btn-xs">
+                                                <button type="button" action="<?php echo site_url("law/century?category={$ctg['id']}") ?>" class="btn btn-go-year btn-block btn-primary btn-xs">
                                                     <i class="fa fa-search"></i>
                                                     Detail
                                                 </button>
