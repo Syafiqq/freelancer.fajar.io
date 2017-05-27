@@ -74,21 +74,39 @@ if (!isset($dataCount))
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="<?php echo site_url('law/create') ?>">
+                                <!-- The user image in the navbar-->
                                 <i class="fa fa-plus"></i>
-                                Tambah
+                                &nbsp;&nbsp;Status Hukum
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Tag
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                    <a href="<?php echo site_url('tag/create') ?>">Tambah</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                    <a href="<?php echo site_url('tag') ?>">Modifikasi</a>
                                 </li>
-                                <li class="divider"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Kategori
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
+                                    <a href="<?php echo site_url('category/create') ?>">Tambah</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('category') ?>">Modifikasi</a>
                                 </li>
                             </ul>
                         </li>
@@ -116,25 +134,21 @@ if (!isset($dataCount))
     <!-- Full Width Column -->
     <div class="content-wrapper">
         <div class="container">
-            <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
                     &nbsp;
                 </h1>
                 <ol class="breadcrumb">
-                    <li>
-                        <a href="<?php echo site_url('dashboard') ?>">
-                            <i class="fa fa-dashboard"></i>
-                            Dashboard
-                        </a>
+                    <li class="active">
+                        <i class="fa fa-dashboard"></i>
+                        Label
                     </li>
-                    <li class="active">Label Pendukung</li>
                 </ol>
             </section>
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-default">
+                <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Label Pendukung</h3>
                     </div>
@@ -162,8 +176,8 @@ if (!isset($dataCount))
                                             echo '<tr>';
                                             echo "<td>{$key}</td>
                                                   <td><span class=\"label label-default\" style=\"background-color: #${value['color']}; color: #${value['colortext']}\"><abbr title=\"${value['description']}\">${value['name']}</abbr></span></td>
-                                                  <td><button type=\"button\" action=\"" . site_url('dashboard/edittag?id=' . $value['id']) . "\" class=\"btn btn-do-edit btn-block btn-primary btn-xs\"><i class=\"fa fa-pencil\"></i>&nbsp;&nbsp;Edit</button></td>
-                                                  <td><button action=\"" . site_url('dashboard/do_deletetag?id=' . $value['id']) . "\"  class=\"btn btn-do-delete btn-block btn-danger btn-xs\" data-toggle=\"confirmation\" data-singleton=\"true\"
+                                                  <td><button type=\"button\" action=\"" . site_url('tag/edit?id=' . $value['id']) . "\" class=\"btn btn-do-edit btn-block btn-primary btn-xs\"><i class=\"fa fa-pencil\"></i>&nbsp;&nbsp;Edit</button></td>
+                                                  <td><button action=\"" . site_url('tag/do_delete?id=' . $value['id']) . "\"  class=\"btn btn-do-delete btn-block btn-danger btn-xs\" data-toggle=\"confirmation\" data-singleton=\"true\"
                                                         data-btn-ok-label=\"Ya\" data-btn-ok-icon=\"glyphicon glyphicon-trash\"
                                                         data-btn-ok-class=\"btn-danger\"
                                                         data-btn-cancel-label=\"Tidak\"

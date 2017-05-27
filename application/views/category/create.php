@@ -2,11 +2,11 @@
 /**
  * This <freelancer.fajar.io> project created by :
  * Name         : syafiq
- * Date / Time  : 10 December 2016, 10:42 PM.
+ * Date / Time  : 27 May 2017, 3:55 PM.
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
- */
-?>
+ */ ?>
+
 <!doctype html>
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -19,7 +19,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>UU Tahun <?php echo $dataYear ?></title>
+    <title>Tambar Kategori</title>
     <meta name="description" content="">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('/apple-touch-icon.png') ?>">
@@ -30,9 +30,9 @@
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap.min.css') ?>">
-    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/datatables/media/css/dataTables.bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap-theme.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
@@ -44,44 +44,25 @@
     <script src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/html5shiv.min.js')?>"></script>
     <script src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/respond.min.js')?>"></script>
     <![endif]-->
+    <style type="text/css">
+        .colorpicker-2x .colorpicker-saturation {
+            width: 200px;
+            height: 200px;
+        }
+
+        .colorpicker-2x .colorpicker-hue,
+        .colorpicker-2x .colorpicker-alpha {
+            width: 30px;
+            height: 200px;
+        }
+
+        .colorpicker-2x .colorpicker-color,
+        .colorpicker-2x .colorpicker-color div {
+            height: 30px;
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue layout-top-nav">
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="modal_title_no" style="font-weight: bold">New message</h4>
-            </div>
-            <div class=modal-body>
-                <h4>
-                    <strong>Nomor</strong>
-                </h4>
-                <p id="modal_no">UU xx.xx.xxx</p>
-                <hr>
-                <h4>
-                    <strong>Tentang</strong>
-                </h4>
-                <p id="modal_deskripsi"></p>
-                <hr>
-                <h4>
-                    <strong>Status</strong>
-                </h4>
-                <p id="modal_status"></p>
-            </div>
-            <div class="modal-footer">
-                <a id="modal_source_download" class="btn btn-default" role="button" download>
-                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                    Download
-                </a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!--[if lt IE 8]>
 <p class="browserupgrade">You are using an
     <strong>outdated</strong>
@@ -91,7 +72,6 @@
 </p>
 <![endif]-->
 <div class="wrapper">
-
     <header class="main-header">
         <nav class="navbar navbar-static-top">
             <div class="container">
@@ -101,16 +81,39 @@
                         Hukum
                     </a>
                 </div>
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-plus"></i>
+                                Tambah
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
 
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <li>
                             <!-- Menu Toggle Button -->
-                            <a id="sign-in" href="<?php echo site_url('auth/login') ?>">
+                            <a id="sign-out" href="<?php echo site_url('auth/do_signout') ?>">
                                 <!-- The user image in the navbar-->
-                                <i class="fa fa-sign-in"></i>
-                                &nbsp;&nbsp;Sign in
+                                <i class="fa fa-sign-out"></i>
+                                &nbsp;&nbsp;Sign Out
                             </a>
                         </li>
                     </ul>
@@ -130,80 +133,49 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li>
-                        <a href="<?php echo site_url('dashboard') ?>">
+                        <a href="<?php echo site_url('category') ?>">
                             <i class="fa fa-dashboard"></i>
-                            Dashboard
+                            Kategori
                         </a>
                     </li>
-                    <li>
-                        <a href="<?php echo site_url("dashboard/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
+                    <li class="active">
+                        Tambah
                     </li>
-                    <li class="active">Tahun</li>
                 </ol>
             </section>
 
             <!-- Main content -->
             <section class="content">
-                <div class="box box-default">
+                <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?php echo "{$metadata['category']['name']} Tahun {$dataYear}" ?></h3>
+                        <h3 class="box-title">Tambah Kategori</h3>
                     </div>
-                    <div class="box-body">
-                        <?php
-                        if (count($data) > 0)
-                        {
-                            ?>
-                            <div class="row" style="min-height: 600px">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <table id="uu_data" class="table table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 48px">No</th>
-                                            <th style="width: 60px">Tahun</th>
-                                            <th>Nomor</th>
-                                            <th style="width: 80px">Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        foreach ($data as $key => $value)
-                                        {
-                                            $key += 1;
-                                            echo '<tr>';
-                                            echo "<td>{$key}</td><td>{$value['year']}</td><td>{$value['no']}";
-                                            foreach ($value['tag'] as $vt)
-                                            {
-                                                echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
-                                            }
-                                            echo "</td><td><button type=\"button\" action=\"" . site_url('dashboard/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
-                                            echo '</tr>';
-                                        }
-                                        ?>
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tahun</th>
-                                            <th>No Undang Undang</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                    <div class="box-body" style="min-height: 600px">
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <form class="form-horizontal" id="uu_category_create" action="<?php echo site_url('category/do_create') ?>" method="post">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Nama Kategori</label>
+                                            <div class="col-sm-10">
+                                                <input name="name" type="text" class="form-control" placeholder="Nama Kategori">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Singkatan</label>
+                                            <div class="col-sm-10">
+                                                <input name="slug" type="text" class="form-control" placeholder="Singkatan">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn btn-info pull-right">Save</button>
+                                    </div>
+                                    <!-- /.box-footer -->
+                                </form>
                             </div>
-                            <?php
-                        }
-                        else
-                        {
-                            ?>
-                            <div class="row" style="height: 800px">
-                                <div class="col-md-12">
-                                    <h5 align="center">Tidak Terdapat Undang Undang Pada Tahun Ini</h5>
-                                </div>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -232,11 +204,11 @@
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js') ?>"></script>
 <script>window.jQuery || document.write('<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js')?>"><\/script>')</script>
 
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-serialize-object/dist/jquery.serialize-object.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/dataTables.bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/fastclick/lib/fastclick.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/app.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
@@ -249,12 +221,12 @@
          */
         $(function ()
         {
-            $("button.btn-go-detail").on('click', function (event)
+            $("a#sign-out").on('click', function (event)
             {
                 event.preventDefault();
                 $.ajax({
                     type: 'post',
-                    url: $(this).attr('action'),
+                    url: $(this).attr('href'),
                     dataType: 'json',
                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
                 })
@@ -262,33 +234,6 @@
                     {
                         if (data.hasOwnProperty('data'))
                         {
-                            if (data['data'].hasOwnProperty('result'))
-                            {
-                                $("p#modal_deskripsi").text("");
-                                $("p#modal_status").text("");
-                                $("h4#modal_title_no").text(data['data']['result']['no']);
-                                $("p#modal_no").text(data['data']['result']['no']);
-                                if (data['data']['result'].hasOwnProperty('tag'))
-                                {
-                                    for (var ti = -1, ts = data['data']['result']['tag'].length; ++ti < ts;)
-                                    {
-                                        $("p#modal_no").append("&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + data['data']['result']['tag'][ti]['color'] + "; color: #" + data['data']['result']['tag'][ti]['colortext'] + "\"><abbr title=\"" + data['data']['result']['tag'][ti]['description'] + "\">" + data['data']['result']['tag'][ti]['name'] + "</abbr></span>");
-                                    }
-                                }
-                                $("p#modal_deskripsi").append(data['data']['result']['description']);
-                                $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
-                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('dashboard/year?year=' . $dataYear)?>');
-                                if (data['data']['result']['reference'] == null)
-                                {
-                                    $("a#modal_source_download").hide();
-                                }
-                                else
-                                {
-                                    $("a#modal_source_download").hide();
-                                    $("a#modal_source_download").attr('href', data['data']['result']['reference']);
-                                }
-                                $('#myModal').modal('show');
-                            }
                             if (data['data'].hasOwnProperty('notify'))
                             {
                                 var notify = data['data']['notify'];
@@ -310,6 +255,20 @@
                                 }
                             }
                         }
+                        if (data.hasOwnProperty('code'))
+                        {
+                            if (data['code'] == 200)
+                            {
+                                setTimeout(function ()
+                                {
+                                    if (data.hasOwnProperty('redirect'))
+                                    {
+                                        location.href = data['redirect'];
+                                    }
+                                }, 2000);
+                            }
+                        }
+
                     })
                     .fail(function ()
                     {
@@ -319,16 +278,71 @@
                             // settings
                             type: 'danger'
                         });
-                    });
+                    })
+
             });
 
-            $('table#uu_data').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false
+            $("form#uu_category_create").on('submit', function (event)
+            {
+                event.preventDefault();
+                var form = $(this);
+                var value = form.serializeObject();
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: value,
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
+                })
+                    .done(function (data)
+                    {
+                        if (data.hasOwnProperty('data'))
+                        {
+                            if (data['data'].hasOwnProperty('notify'))
+                            {
+                                var notify = data['data']['notify'];
+                                for (var i = -1; ++i < notify.length;)
+                                {
+                                    $.notify({message: notify[i][0]}, {
+                                        type: notify[i][1],
+                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                        '<span data-notify="icon"></span> ' +
+                                        '<span data-notify="title">{1}</span> ' +
+                                        '<span style="color: black" data-notify="message">{2}</span>' +
+                                        '<div class="progress" data-notify="progressbar">' +
+                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                                        '</div>' +
+                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                                        '</div>'
+                                    });
+                                }
+                            }
+                        }
+                        if (data.hasOwnProperty('code'))
+                        {
+                            if (data['code'] == 200)
+                            {
+                                setTimeout(function ()
+                                {
+                                    if (data.hasOwnProperty('redirect'))
+                                    {
+                                        location.href = data['redirect'];
+                                    }
+                                }, 2000);
+                            }
+                        }
+
+                    })
+                    .fail(function ()
+                    {
+                        $.notify({
+                            message: 'Error'
+                        }, {
+                            // settings
+                            type: 'danger'
+                        });
+                    })
             });
         });
 

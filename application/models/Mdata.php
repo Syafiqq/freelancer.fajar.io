@@ -34,7 +34,7 @@ class Mdata extends CI_Model
 
     public function getCategoryCount()
     {
-        $query = 'SELECT `category`.`id`, `category`.`name`, `category`.`slug`, count(`data`.`id`) AS \'count\' FROM `data` RIGHT OUTER JOIN `category` ON `data`.`category` = `category`.`id`  GROUP BY `category`.`id` ORDER BY `category`.`id` ASC';
+        $query = 'SELECT `category`.`id`, `category`.`name`, `category`.`slug`, count(`data`.`id`) AS \'count\' FROM `data` LEFT OUTER JOIN `category` ON `data`.`category` = `category`.`id`  GROUP BY `category`.`id` ORDER BY `category`.`id` ASC';
         $result = $this->db->query($query);
         return $result->result_array();
     }
@@ -81,10 +81,10 @@ class Mdata extends CI_Model
         return $result->result_array();
     }
 
-    public function edit($id, $description, $status)
+    public function edit($id, $description, $status, $category, $reference)
     {
-        $query = 'UPDATE `data` SET `description`=?,`status`=? WHERE `id` = ?';
-        $this->db->query($query, array($description, $status, (int)$id));
+        $query = 'UPDATE `data` SET `description`=?,`status`=?, `category`=?, `reference`=? WHERE `id` = ?';
+        $this->db->query($query, array($description, $status, (int)$category, $reference, (int)$id));
     }
 
     public function delete($id)
@@ -93,10 +93,10 @@ class Mdata extends CI_Model
         $this->db->query($query, array((int)$id));
     }
 
-    public function create($no, $year, $description, $status)
+    public function create($no, $year, $description, $status, $category, $reference)
     {
-        $query = 'INSERT INTO `data`(`id`, `year`, `no`, `description`, `status`) VALUES (NULL, ?, ?, ?, ?)';
-        $this->db->query($query, array($year, $no, $description, $status));
+        $query = 'INSERT INTO `data`(`id`, `year`, `no`, `description`, `status`, `category`, `reference`) VALUES (NULL, ?, ?, ?, ?, ?, ?)';
+        $this->db->query($query, array($year, $no, $description, $status, (int)$category, $reference));
     }
 
     /*    public function getLatestTimestamp()

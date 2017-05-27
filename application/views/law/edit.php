@@ -6,6 +6,11 @@
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
+if (!isset($data))
+{
+    $data = array();
+}
+
 ?>
 <!doctype html>
 <!--[if lt IE 7]>
@@ -19,7 +24,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Create Tag</title>
+    <title><?php echo $data['no'] ?></title>
     <meta name="description" content="">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('/apple-touch-icon.png') ?>">
@@ -30,10 +35,11 @@
     <meta name="theme-color" content="#ffffff">
 
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap.min.css') ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/datatables/media/css/dataTables.bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/css/bootstrap-theme.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
-    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/select2/dist/css/select2.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
 
@@ -44,23 +50,6 @@
     <script src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/html5shiv.min.js')?>"></script>
     <script src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/respond.min.js')?>"></script>
     <![endif]-->
-    <style type="text/css">
-        .colorpicker-2x .colorpicker-saturation {
-            width: 200px;
-            height: 200px;
-        }
-
-        .colorpicker-2x .colorpicker-hue,
-        .colorpicker-2x .colorpicker-alpha {
-            width: 30px;
-            height: 200px;
-        }
-
-        .colorpicker-2x .colorpicker-color,
-        .colorpicker-2x .colorpicker-color div {
-            height: 30px;
-        }
-    </style>
 </head>
 <body class="hold-transition skin-blue layout-top-nav">
 <!--[if lt IE 8]>
@@ -85,21 +74,39 @@
                 <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="<?php echo site_url('law/create') ?>">
+                                <!-- The user image in the navbar-->
                                 <i class="fa fa-plus"></i>
-                                Tambah
+                                &nbsp;&nbsp;Status Hukum
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Tag
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/create') ?>">Status Hukum</a>
+                                    <a href="<?php echo site_url('tag/create') ?>">Tambah</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/createtag') ?>">Label Pendukung</a>
+                                    <a href="<?php echo site_url('tag') ?>">Modifikasi</a>
                                 </li>
-                                <li class="divider"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-list"></i>
+                                &nbsp;&nbsp;Kategori
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="<?php echo site_url('dashboard/tag') ?>">Modifikasi Label Pendukung</a>
+                                    <a href="<?php echo site_url('category/create') ?>">Tambah</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo site_url('category') ?>">Modifikasi</a>
                                 </li>
                             </ul>
                         </li>
@@ -139,7 +146,13 @@
                             Dashboard
                         </a>
                     </li>
-                    <li class="active">Tambah Label Pendukung</li>
+                    <li>
+                        <a href="<?php echo site_url("law/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("law/year?year={$data['year']}&category={$metadata['category']['id']}") ?>"><?php echo "Tahun-{$data['year']}" ?></a>
+                    </li>
+                    <li><?php echo $data['no'] ?></li>
                 </ol>
             </section>
 
@@ -147,56 +160,84 @@
             <section class="content">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tambah Label Pendukung</h3>
+                        <h3 class="box-title"><?php echo $data['no'] ?></h3>
                     </div>
-                    <div class="box-body" style="min-height: 600px">
+                    <div class="box-body">
                         <div class="row">
                             <div class="col-md-10 col-md-offset-1">
-                                <form class="form-horizontal" id="uu_tag_create" action="<?php echo site_url('dashboard/do_createtag') ?>" method="post">
+                                <form class="form-horizontal" id="uu_form_edit" action="<?php echo site_url('law/do_edit?id=' . $data['id']) ?>" method="post">
                                     <div class="box-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Nomor</label>
+                                            <div class="col-sm-10">
+                                                <p class="form-control-static"><?php echo $data['no'] ?></p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Tahun</label>
+                                            <div class="col-sm-10">
+                                                <p class="form-control-static"><?php echo $data['year'] ?></p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="story_main" class="col-sm-2 control-label">Tentang</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="uu_description" name="description" class="form-control" rows="10" placeholder="Deskripsi"><?php echo $data['description'] ?></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="story_information" class="col-sm-2 control-label">Status</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="uu_status" style="max-height: 160px" name="status" class="form-control" rows="3" placeholder="Status"><?php echo $data['status'] ?></textarea>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label">Label Pendukung</label>
                                             <div class="col-sm-10">
-                                                <input name="name" type="text" class="form-control" placeholder="Nama Tag">
+                                                <select name="tag" id="select_tag" class="form-control" multiple="multiple" data-placeholder="Pilih Label Pendukung" style="width: 100%;">
+                                                    <?php
+                                                    $tmp_st = count($data['tag']);
+                                                    $tmp_i = -1;
+                                                    $tmp_gate = (++$tmp_i < $tmp_st) ? true : false;
+                                                    foreach ($tags as $tag)
+                                                    {
+                                                        echo "<option value='{$tag['id']}'";
+                                                        if ($tmp_gate)
+                                                        {
+                                                            if ($tag['id'] == $data['tag'][$tmp_i]['id'])
+                                                            {
+                                                                echo 'selected';
+                                                                $tmp_gate = (++$tmp_i < $tmp_st) ? true : false;
+                                                            }
+                                                        }
+                                                        echo "><abbr title=\"{$tag['name']}\">{$tag['description']}</abbr></option>";
+                                                    } ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Deskripsi</label>
+                                            <label class="col-sm-2 control-label" for="category">Kategori</label>
                                             <div class="col-sm-10">
-                                                <input name="description" type="text" class="form-control" placeholder="Deskripsi">
+                                                <select name="category" id="category" class="form-control" data-placeholder="Pilih Kategori" style="width: 100%;">
+                                                    <?php
+                                                    foreach ($categories as $category)
+                                                    {
+                                                        $selected = (int)$category['id'] === (int)$data['category'] ? 'selected' : '';
+                                                        echo "<option value='{$category['id']}' {$selected}>{$category['name']}</option>";
+                                                    } ?>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-2 control-label">Warna Background</label>
-                                            <div class="col-sm-4">
-                                                <div id="form_tag_color" class="input-group colorpicker-component" data-format="hex">
-                                                    <input name="color" type="text" value="#000000" class="form-control"/>
-                                                    <span class="input-group-addon"><i></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Warna Text</label>
-                                            <div class="col-sm-4">
-                                                <div id="form_tag_colortext" class="input-group colorpicker-component" data-format="hex">
-                                                    <input name="colortext" type="text" value="#FFFFFF" class="form-control"/>
-                                                    <span class="input-group-addon"><i></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-2">
-                                                <button id="tag_preview" type="button" class="btn btn-default pull-right">Preview</button>
-                                            </div>
+                                            <label class="col-sm-2 control-label">Referensi</label>
                                             <div class="col-sm-10">
-                                                <h4>
-                                                    <span id="tag_preview_test" class="label label-default"><abbr title="Test">Test</abbr></span>
-                                                </h4>
+                                                <input name="reference" type="text" class="form-control" placeholder="Referensi" value="<?php echo $data['reference'] ?>">
                                             </div>
                                         </div>
                                     </div>
                                     <!-- /.box-body -->
                                     <div class="box-footer">
+                                        <input type="hidden" name="category" value="<?php echo $data['category'] ?>">
                                         <button type="submit" class="btn btn-info pull-right">Save</button>
                                     </div>
                                     <!-- /.box-footer -->
@@ -234,11 +275,14 @@
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-serialize-object/dist/jquery.serialize-object.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/jquery.dataTables.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/datatables/media/js/dataTables.bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js') ?>"></script>
-<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/fastclick/lib/fastclick.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/app.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/select2/dist/js/select2.full.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/ckeditor_4.6.1_basic/ckeditor.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/initializr/js/plugins.js') ?>"></script>
 <script type="text/javascript">
     (function ($)
@@ -248,7 +292,7 @@
          */
         $(function ()
         {
-            $("a#sign-out").on('click', function (event)
+            $("a#sign-out, a#versioning").on('click', function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -309,46 +353,23 @@
 
             });
 
-            $('div#form_tag_color, div#form_tag_colortext').colorpicker({
-                customClass: 'colorpicker-2x',
-                sliders: {
-                    saturation: {
-                        maxLeft: 200,
-                        maxTop: 200
-                    },
-                    hue: {
-                        maxTop: 200
-                    },
-                    alpha: {
-                        maxTop: 200
-                    }
-                }
-            });
+            $('select#select_tag').select2();
 
-            $("button#tag_preview").on('click', function (event)
-            {
-                event.preventDefault();
-                var value = $('form#uu_tag_create').serializeObject();
-                var preview = $('span#tag_preview_test');
-                preview.css('background-color', value['color']);
-                preview.css('color', value['colortext']);
-                preview.find('abbr').attr('title', value['description'].trim().length <= 0 ? '-' : value['description']);
-                preview.find('abbr').text(value['name'].trim().length <= 0 ? '-' : value['name']);
-            });
+            CKEDITOR.replace('uu_description');
+            CKEDITOR.replace('uu_status');
 
-            $("form#uu_tag_create").on('submit', function (event)
+            $("form#uu_form_edit").on('submit', function (event)
             {
                 event.preventDefault();
                 var form = $(this);
-                var value = form.serializeObject();
-                value['description'] = value['description'].trim().length <= 0 ? '-' : value['description'];
-                value['name'] = value['name'].trim().length <= 0 ? '-' : value['name'];
-                value['color'] = value['color'].replace('#', '');
-                value['colortext'] = value['colortext'].replace('#', '');
+                var data_sent = form.serializeObject();
+                data_sent['tag'] = $('select#select_tag').val();
+                data_sent['description'] = CKEDITOR.instances.uu_description.getData();
+                data_sent['status'] = CKEDITOR.instances.uu_status.getData();
                 $.ajax({
                     type: form.attr('method'),
                     url: form.attr('action'),
-                    data: value,
+                    data: data_sent,
                     dataType: 'json',
                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
                 })
@@ -381,6 +402,17 @@
                         {
                             if (data['code'] == 200)
                             {
+                                setTimeout(function ()
+                                {
+                                    if (data.hasOwnProperty('redirect'))
+                                    {
+                                        location.href = data['redirect'];
+                                    }
+                                    else
+                                    {
+                                        location.href = window.location.protocol + '//' + window.location.host + '/dashboard'
+                                    }
+                                }, 2000);
                             }
                         }
 
