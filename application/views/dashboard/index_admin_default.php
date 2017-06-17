@@ -27,6 +27,11 @@ if (!isset($dataCount))
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Dashboard</title>
     <meta name="description" content="">
+    <?php foreach ((isset($meta) ? $meta : array()) as $k => $v)
+    {
+        echo "<meta name=\"${k}\" content=\"${v}\">";
+    }
+    ?>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('/apple-touch-icon.png') ?>">
     <link rel="icon" type="image/png" href="<?php echo base_url('/favicon-32x32.png') ?>" sizes="32x32">
@@ -107,6 +112,24 @@ if (!isset($dataCount))
                                 </li>
                                 <li>
                                     <a href="<?php echo site_url('category') ?>">Modifikasi</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-eye"></i>
+                                &nbsp;&nbsp;Tampilan
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a class="view_layout_change" x-view="default" href="<?php echo site_url('dashboard') ?>">Default</a>
+                                </li>
+                                <li>
+                                    <a class="view_layout_change" x-view="all" href="<?php echo site_url('dashboard') ?>">Semua Data</a>
+                                </li>
+                                <li>
+                                    <a class="view_layout_change" x-view="search" href="<?php echo site_url('dashboard') ?>">Pencarian</a>
                                 </li>
                             </ul>
                         </li>
@@ -220,6 +243,7 @@ if (!isset($dataCount))
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/app.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/initializr/js/plugins.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/js-cookie/src/js.cookie.js') ?>"></script>
 <script type="text/javascript">
     (function ($)
     {
@@ -302,6 +326,23 @@ if (!isset($dataCount))
                 "info": true,
                 "autoWidth": false
             });
+
+            $('a.view_layout_change').on('click', function (event)
+            {
+                event.preventDefault();
+                var type = $(this).attr('x-view');
+                var path = $('meta[name="path"]').attr('content');
+                type = ((type === undefined) || (type === null)) ? 'default' : type;
+                var attrib = {};
+                if ((path !== undefined) && (path !== null))
+                {
+                    attrib['path'] = path;
+                }
+                Cookies.set('view_layout', type, attrib);
+                location.reload(true);
+            });
+
+
         });
 
         /*
