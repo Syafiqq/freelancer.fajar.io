@@ -46,6 +46,7 @@ if (!isset($data))
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/nprogress/nprogress.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
 
     <script src="<?php echo base_url('assets/frontend/bower_components/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') ?>"></script>
@@ -228,62 +229,46 @@ if (!isset($data))
                         <h3 class="box-title">Peraturan</h3>
                     </div>
                     <div class="box-body" style="padding: 16px;min-height: 400px">
-                        <?php
-                        if (count($data) > 0)
-                        {
-                            ?>
-                            <div class="row" style="min-height: 600px">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <table id="uu_data" class="table table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 48px">No</th>
-                                            <th style="width: 60px">Tahun</th>
-                                            <th style="width: 250px">Kategori</th>
-                                            <th>Nomor</th>
-                                            <th style="width: 80px">Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        foreach ($data as $key => $value)
+                        <div class="row" style="min-height: 600px">
+                            <div class="col-md-10 col-md-offset-1">
+                                <table id="uu_data" class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 48px">No</th>
+                                        <th style="width: 60px">Tahun</th>
+                                        <th style="width: 250px">Kategori</th>
+                                        <th>Nomor</th>
+                                        <th style="width: 80px">Detail</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    foreach ($data as $key => $value)
+                                    {
+                                        $key += 1;
+                                        echo '<tr>';
+                                        echo "<td>{$key}</td><td>{$value['year']}</td><td>{$value['category']['name']}</td><td>{$value['no']}";
+                                        foreach ($value['tag'] as $vt)
                                         {
-                                            $key += 1;
-                                            echo '<tr>';
-                                            echo "<td>{$key}</td><td>{$value['year']}</td><td>{$value['category']['name']}</td><td>{$value['no']}";
-                                            foreach ($value['tag'] as $vt)
-                                            {
-                                                echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
-                                            }
-                                            echo "</td><td><button type=\"button\" action=\"" . site_url('law/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
-                                            echo '</tr>';
+                                            echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
                                         }
-                                        ?>
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tahun</th>
-                                            <th>Nomor</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                        echo "</td><td><button type=\"button\" action=\"" . site_url('law/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
+                                        echo '</tr>';
+                                    }
+                                    ?>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Tahun</th>
+                                        <th>Kategori</th>
+                                        <th>Nomor</th>
+                                        <th>Detail</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-                            <?php
-                        }
-                        else
-                        {
-                            ?>
-                            <div class="row" style="height: 800px">
-                                <div class="col-md-12">
-                                    <h5 align="center">Tidak Terdapat Undang Undang Pada Tahun Ini</h5>
-                                </div>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                        </div>
                     </div>
                     <div class="box-footer">
                     </div>
@@ -325,6 +310,7 @@ if (!isset($data))
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/initializr/js/plugins.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/js-cookie/src/js.cookie.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/nprogress/nprogress.js') ?>"></script>
 <script type="text/javascript">
     (function ($)
     {
@@ -333,7 +319,7 @@ if (!isset($data))
          */
         $(function ()
         {
-            $("a#sign-out, a#versioning").on('click', function (event)
+            $(document).on('click', "a#sign-out, a#versioning", function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -393,13 +379,13 @@ if (!isset($data))
                     })
             });
 
-            $("button.btn-go-year").on('click', function (event)
+            $(document).on('click', "button.btn-go-year", function (event)
             {
                 event.preventDefault();
                 location.href = $(this).attr('action');
             });
 
-            $("button.btn-go-detail").on('click', function (event)
+            $(document).on('click', "button.btn-go-detail", function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -473,7 +459,7 @@ if (!isset($data))
                     });
             });
 
-            $("button#modal-do-edit").on('click', function (event)
+            $(document).on('click', "button#modal-do-edit", function (event)
             {
                 event.preventDefault();
                 location.href = $(this).attr('action');
@@ -542,7 +528,7 @@ if (!isset($data))
                 }
             });
 
-            $('table#uu_data').DataTable({
+            var table = $('table#uu_data').DataTable({
                 "paging": true,
                 "pageLength": 15,
                 "lengthChange": false,
@@ -552,7 +538,7 @@ if (!isset($data))
                 "autoWidth": false
             });
 
-            $('a.view_layout_change').on('click', function (event)
+            $(document).on('click', 'a.view_layout_change', function (event)
             {
                 event.preventDefault();
                 var type = $(this).attr('x-view');
@@ -567,8 +553,56 @@ if (!isset($data))
                 location.reload(true);
             });
 
+            NProgress.configure({
+                showSpinner: false,
+                template: '<div class="bar" role="bar" style="background-color: red"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
+            });
+            NProgress.start();
 
-        });
+            this.retreiveData = function (table, link, progress)
+            {
+                $.ajax({
+                    type: 'post',
+                    url: link,
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
+                })
+                    .done(function (data)
+                    {
+                        if (data.hasOwnProperty('data'))
+                        {
+                            if (data['data'].hasOwnProperty('data'))
+                            {
+                                var contents = data['data']['data'];
+                                for (var i = -1; ++i < contents.length;)
+                                {
+                                    var content = contents[i];
+                                    var tags = '';
+                                    for (var j = -1; ++j < content['tag'].length;)
+                                    {
+                                        var tag = content['tag'][j];
+                                        tags += "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + tag['color'] + "; color: #" + tag['colortext'] + "\"><abbr title=\"" + tag['description'] + "\">" + tag['name'] + "</abbr></span>";
+                                    }
+                                    var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
+                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags, edit_button]);
+                                }
+                                table.draw(true);
+                            }
+                        }
+                        progress.done();
+                    })
+                    .fail(function ()
+                    {
+                        progress.done();
+                    });
+            };
+
+            var link = $('meta[name="source"]').attr('content');
+            if ((link !== undefined) && (link !== null))
+            {
+                this.retreiveData(table, link, NProgress);
+            }
+        })
 
         /*
          * Run right away
