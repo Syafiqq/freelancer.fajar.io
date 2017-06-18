@@ -51,9 +51,8 @@ class Dashboard extends CI_Controller
                 {
                     case 'all' :
                     {
-                        $content = array();
                         $layout = 'dashboard/index_admin_layout_all';
-                        $data = array('year' => Carbon::now()->year, 'data' => $content, 'meta' => array('domain' => site_url(), 'path' => '/dashboard', 'source' => site_url('/dashboard/do_retrieve_all')));
+                        $data = array('year' => Carbon::now()->year, 'meta' => array('domain' => site_url(), 'path' => '/dashboard', 'source' => site_url('/dashboard/do_retrieve_all')));
                     }
                         break;
                     case 'search' :

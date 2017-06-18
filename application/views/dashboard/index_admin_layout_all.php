@@ -7,11 +7,6 @@
  * Github       : syafiqq
  */
 
-if (!isset($data))
-{
-    $data = array();
-}
-
 ?>
 <!doctype html>
 <!--[if lt IE 7]>
