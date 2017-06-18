@@ -51,9 +51,9 @@ class Dashboard extends CI_Controller
                 {
                     case 'all' :
                     {
-                        $content = $this->_getAllData();
+                        $content = array();
                         $layout = 'dashboard/index_admin_layout_all';
-                        $data = array('year' => Carbon::now()->year, 'data' => $content, 'meta' => array('domain' => base_url(), 'path' => '/dashboard'));
+                        $data = array('year' => Carbon::now()->year, 'data' => $content, 'meta' => array('domain' => site_url(), 'path' => '/dashboard', 'source' => site_url('/dashboard/do_retrieve_all')));
                     }
                         break;
                     case 'search' :
@@ -79,6 +79,23 @@ class Dashboard extends CI_Controller
         else
         {
             $this->load->view('dashboard/index_free', array('year' => Carbon::now()->year, 'categories' => $categories));
+        }
+    }
+
+    public function do_retrieve_all()
+    {
+        if ($this->input->is_ajax_request() && ($_SERVER['REQUEST_METHOD'] === 'POST'))
+        {
+            $content = $this->_getAllData();
+            echo json_encode(array('code' => 200, 'message' => 'Accepted', 'redirect' => site_url('dashboard'), 'data' => array('data' => $content, 'on_edit' => site_url('law/do_get_detail?id='), 'notify' => array(
+                array('Authentication complete', 'success')
+            ))));
+        }
+        else
+        {
+            echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
+                array('danger', 'Bad Request')
+            ))));
         }
     }
 
