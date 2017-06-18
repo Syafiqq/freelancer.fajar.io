@@ -211,7 +211,7 @@
                     <li class="active">
                         <a href="<?php echo site_url('dashboard') ?>">
                             <i class="fa fa-dashboard"></i>
-                            Dashboard
+                            Dashboard [Semua Data]
                         </a>
                     </li>
                 </ol>
