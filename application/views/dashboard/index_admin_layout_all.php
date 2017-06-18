@@ -538,7 +538,6 @@
                 showSpinner: false,
                 template: '<div class="bar" role="bar" style="background-color: red"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
             });
-            NProgress.start();
 
             this.retreiveData = function (table, link, progress)
             {
@@ -581,6 +580,7 @@
             var link = $('meta[name="source"]').attr('content');
             if ((link !== undefined) && (link !== null))
             {
+                NProgress.start();
                 this.retreiveData(table, link, NProgress);
             }
         })
