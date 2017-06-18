@@ -242,20 +242,6 @@ if (!isset($data))
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <?php
-                                    foreach ($data as $key => $value)
-                                    {
-                                        $key += 1;
-                                        echo '<tr>';
-                                        echo "<td>{$key}</td><td>{$value['year']}</td><td>{$value['category']['name']}</td><td>{$value['no']}";
-                                        foreach ($value['tag'] as $vt)
-                                        {
-                                            echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
-                                        }
-                                        echo "</td><td><button type=\"button\" action=\"" . site_url('law/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
-                                        echo '</tr>';
-                                    }
-                                    ?>
                                     </tbody>
                                     <tfoot>
                                     <tr>
