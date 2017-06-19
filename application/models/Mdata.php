@@ -66,7 +66,7 @@ class Mdata extends CI_Model
         if (!empty($no))
         {
             $no = strtolower($no);
-            $constraint .= "AND LOWER(`data`.`no`) LIKE \"%${no}\"% ";
+            $constraint .= "AND LOWER(`data`.`no`) LIKE \"%${no}%\" ";
         }
         if (!empty($description))
         {
