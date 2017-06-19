@@ -136,4 +136,107 @@ class Dashboard extends CI_Controller
         return $data;
     }
 
+    public function do_search()
+    {
+        if ($this->input->is_ajax_request() && ($_SERVER['REQUEST_METHOD'] === 'POST'))
+        {
+            if (isset($_SESSION['user']['profile']))
+            {
+                if (isset($_POST['description']) &&
+                    isset($_POST['year']) &&
+                    isset($_POST['no']) &&
+                    isset($_POST['status'])
+                )
+                {
+                    if (empty($_POST['description']))
+                    {
+                        $_POST['description'] = null;
+                    }
+                    if (empty($_POST['year']))
+                    {
+                        $_POST['year'] = null;
+                    }
+                    if (empty($_POST['no']))
+                    {
+                        $_POST['no'] = null;
+                    }
+                    if (empty($_POST['status']))
+                    {
+                        $_POST['status'] = null;
+                    }
+
+                    $content = $this->_getAllDataWithConstraint($_POST['year'], $_POST['no'], $_POST['description'], $_POST['status']);
+                    echo json_encode(array('code' => 200, 'message' => 'Accepted', 'redirect' => site_url('dashboard'), 'data' => array('data' => $content, 'on_edit' => site_url('law/do_get_detail?id='), 'notify' => array(
+                        array('Authentication complete', 'success')
+                    ))));
+                }
+            }
+            else
+            {
+                echo json_encode(array('code' => 401, 'message' => 'Access Denied', 'data' => array('notify' => array(
+                    array('Access Denied', 'danger')
+                ))));
+            }
+        }
+        else
+        {
+            echo json_encode(array('code' => 401, 'message' => 'Bad Request', 'data' => array('notify' => array(
+                array('Bad Request', 'danger')
+            ))));
+        }
+    }
+
+    private function _getAllDataWithConstraint($year, $no, $description, $status)
+    {
+        $this->load->model('mdata');
+        $this->load->model('mcategory');
+        $this->load->model('mtag');
+        if (!empty($description))
+        {
+            $description = explode(' ', $description);
+        }
+        if (!empty($status))
+        {
+            $status = explode(' ', $status);
+        }
+
+        $data = $this->mdata->getAllDataNoWithConstraint($year, $no, $description, $status);
+        $_category = array();
+        $category = $this->mcategory->getAll();
+        foreach ($category as $value)
+        {
+            $_category["${value['id']}."] = $value;
+        }
+        unset($category);
+        $category = $_category;
+        unset($_category);
+        if (count($data) <= 0)
+        {
+            $data = array();
+        }
+        else
+        {
+            foreach ($data as $key => $value)
+            {
+                if ($value['tag'] <= 0)
+                {
+                    $data[$key]['tag'] = array();
+                }
+                else
+                {
+                    $data[$key]['tag'] = $this->mtag->getFromDataTag($value['id']);
+                }
+                $data[$key]['category'] =& $category["${value['category']}."];
+                if (strlen($data[$key]['description']) > 100)
+                {
+                    $pos = strpos($data[$key]['description'], ' ', 100);
+                    $data[$key]['description'] = substr($data[$key]['description'], 0, $pos) . '...';
+                }
+
+            }
+        }
+
+        return $data;
+    }
+
 }
