@@ -56,6 +56,44 @@ class Mdata extends CI_Model
         return $result->result_array();
     }
 
+    public function getAllDataNoWithConstraint($year, $no, $description = array(), $status = array())
+    {
+        $constraint = '';
+        if (!empty($year))
+        {
+            $constraint .= "AND `data`.`year` = ${year} ";
+        }
+        if (!empty($no))
+        {
+            $no = strtolower($no);
+            $constraint .= "AND LOWER(`data`.`no`) LIKE \"%${no}\"% ";
+        }
+        if (!empty($description))
+        {
+            $constraint .= 'AND ( FALSE ';
+            foreach ($description as $_description)
+            {
+                $_description = strtolower($_description);
+                $constraint .= " OR LOWER(`data`.`description`) LIKE \"%${_description}%\" ";
+            }
+            $constraint .= ' )';
+        }
+        if (!empty($status))
+        {
+            $constraint .= 'AND ( FALSE ';
+            foreach ($status as $_status)
+            {
+                $_status = strtolower($_status);
+                $constraint .= " OR LOWER(`data`.`description`) LIKE \"%${_status}%\" ";
+            }
+            $constraint .= ' )';
+        }
+        $query = "SELECT `data`.`id`, `data`.`year`, `data`.`no`, `data`.`category`,  `data`.`description`, count(`data_tag`.`tag`) AS 'tag' FROM `data` LEFT OUTER JOIN `data_tag` ON `data`.`id` = `data_tag`.`data` WHERE TRUE ${constraint} GROUP BY `data`.`id` ORDER BY `year` ASC , `category` ASC ";
+        $result = $this->db->query($query);
+
+        return $result->result_array();
+    }
+
     public function getDataNoAccordingToYear($year, $category)
     {
         $query = 'SELECT `data`.`id`, `data`.`year`, `data`.`no`, `data`.`category`, count(`data_tag`.`tag`) AS \'tag\' FROM `data` LEFT OUTER JOIN `data_tag` ON `data`.`id` = `data_tag`.`data`  WHERE `data`.`year` = ? AND `data`.`category` = ? GROUP BY `data`.`id` ORDER BY `data`.`id` ASC';
