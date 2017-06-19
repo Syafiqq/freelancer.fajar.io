@@ -2,14 +2,10 @@
 /**
  * This <freelancer.fajar.io> project created by :
  * Name         : syafiq
- * Date / Time  : 10 December 2016, 10:42 PM.
+ * Date / Time  : 23 May 2017, 6:34 AM.
  * Email        : syafiq.rezpector@gmail.com
  * Github       : syafiqq
  */
-if (!isset($data))
-{
-    $data = array();
-}
 
 ?>
 <!doctype html>
@@ -24,8 +20,13 @@ if (!isset($data))
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>UU Tahun <?php echo $dataYear ?></title>
+    <title>Dashboard</title>
     <meta name="description" content="">
+    <?php foreach ((isset($meta) ? $meta : array()) as $k => $v)
+    {
+        echo "<meta name=\"${k}\" content=\"${v}\">";
+    }
+    ?>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('/apple-touch-icon.png') ?>">
     <link rel="icon" type="image/png" href="<?php echo base_url('/favicon-32x32.png') ?>" sizes="32x32">
@@ -40,6 +41,7 @@ if (!isset($data))
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/font-awesome/css/font-awesome.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/Ionicons/css/ionicons.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/AdminLTE.min.css') ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/nprogress/nprogress.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/css/skins/skin-blue.min.css') ?>">
 
     <script src="<?php echo base_url('assets/frontend/bower_components/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js') ?>"></script>
@@ -158,6 +160,24 @@ if (!isset($data))
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-eye"></i>
+                                &nbsp;&nbsp;Tampilan
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a class="view_layout_change" x-view="default" href="<?php echo site_url('dashboard') ?>">Default</a>
+                                </li>
+                                <li>
+                                    <a class="view_layout_change" x-view="all" href="<?php echo site_url('dashboard') ?>">Semua Data</a>
+                                </li>
+                                <li>
+                                    <a class="view_layout_change" x-view="search" href="<?php echo site_url('dashboard') ?>">Pencarian</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -188,16 +208,12 @@ if (!isset($data))
                     &nbsp;
                 </h1>
                 <ol class="breadcrumb">
-                    <li>
+                    <li class="active">
                         <a href="<?php echo site_url('dashboard') ?>">
                             <i class="fa fa-dashboard"></i>
-                            Dashboard
+                            Dashboard [Pencarian]
                         </a>
                     </li>
-                    <li>
-                        <a href="<?php echo site_url("law/century?category={$metadata['category']['id']}") ?>"><?php echo strtoupper($metadata['category']['slug']) ?></a>
-                    </li>
-                    <li class="active">Tahun</li>
                 </ol>
             </section>
 
@@ -205,64 +221,80 @@ if (!isset($data))
             <section class="content">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?php echo "{$metadata['category']['name']} Tahun {$dataYear}" ?></h3>
+                        <h3 class="box-title">Peraturan</h3>
                     </div>
                     <div class="box-body">
-                        <?php
-                        if (count($data) > 0)
-                        {
-                            ?>
-                            <div class="row" style="min-height: 600px">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <table id="uu_data" class="table table-bordered table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th style="width: 48px">No</th>
-                                            <th style="width: 60px">Tahun</th>
-                                            <th>Nomor</th>
-                                            <th style="width: 80px">Detail</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        foreach ($data as $key => $value)
-                                        {
-                                            $key += 1;
-                                            echo '<tr>';
-                                            echo "<td>{$key}</td><td>{$value['year']}</td><td>{$value['no']}";
-                                            foreach ($value['tag'] as $vt)
-                                            {
-                                                echo "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #${vt['color']}; color: #${vt['colortext']}\"><abbr title=\"${vt['description']}\">${vt['name']}</abbr></span>";
-                                            }
-                                            echo "</td><td><button type=\"button\" action=\"" . site_url('law/do_get_detail?id=' . $value['id']) . "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button></td>";
-                                            echo '</tr>';
-                                        }
-                                        ?>
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Tahun</th>
-                                            <th>Nomor</th>
-                                            <th>Detail</th>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <form class="form-horizontal" id="uu_form_search" action="<?php echo site_url('/dashboard/do_search') ?>" method="post">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Nomor</label>
+                                            <div class="col-sm-10">
+                                                <input name="no" type="text" class="form-control" placeholder="Status Hukum">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Tahun</label>
+                                            <div class="col-sm-10">
+                                                <input name="year" type="text" class="form-control" placeholder="Tahun">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Tentang</label>
+                                            <div class="col-sm-10">
+                                                <input name="description" type="text" class="form-control" placeholder="Deskripsi">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Status</label>
+                                            <div class="col-sm-10">
+                                                <input name="status" type="text" class="form-control" placeholder="Status">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn btn-info pull-right">Cari</button>
+                                    </div>
+                                    <!-- /.box-footer -->
+                                </form>
                             </div>
-                            <?php
-                        }
-                        else
-                        {
-                            ?>
-                            <div class="row" style="height: 800px">
-                                <div class="col-md-12">
-                                    <h5 align="center">Tidak Terdapat Undang Undang Pada Tahun Ini</h5>
-                                </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+                <div class="box box-primary">
+                    <div class="box-body" style="padding: 16px;min-height: 400px">
+                        <div class="row" style="min-height: 600px">
+                            <div class="col-md-10 col-md-offset-1">
+                                <table id="uu_data" class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 48px">No</th>
+                                        <th style="width: 60px">Tahun</th>
+                                        <th style="width: 200px">Kategori</th>
+                                        <th>Nomor</th>
+                                        <th style="width: 80px">Detail</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Tahun</th>
+                                        <th>Kategori</th>
+                                        <th>Nomor</th>
+                                        <th>Detail</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-                            <?php
-                        }
-                        ?>
+                        </div>
+                    </div>
+                    <div class="box-footer">
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -290,7 +322,7 @@ if (!isset($data))
 <!-- ./wrapper -->
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js') ?>"></script>
 <script>window.jQuery || document.write('<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js')?>"><\/script>')</script>
-
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-serialize-object/dist/jquery.serialize-object.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-confirmation2/bootstrap-confirmation.min.js') ?>"></script>
@@ -301,6 +333,8 @@ if (!isset($data))
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/AdminLTE/dist/js/app.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/initializr/js/plugins.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/js-cookie/src/js.cookie.js') ?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/nprogress/nprogress.js') ?>"></script>
 <script type="text/javascript">
     (function ($)
     {
@@ -309,7 +343,21 @@ if (!isset($data))
          */
         $(function ()
         {
-            $("a#sign-out").on('click', function (event)
+            var notify_template = function ()
+            {
+                return '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                    '<span data-notify="icon"></span> ' +
+                    '<span data-notify="title">{1}</span> ' +
+                    '<span style="color: black" data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar">' +
+                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                    '</div>' +
+                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                    '</div>';
+            };
+
+            $(document).on('click', "a#sign-out, a#versioning", function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -329,16 +377,7 @@ if (!isset($data))
                                 {
                                     $.notify({message: notify[i][0]}, {
                                         type: notify[i][1],
-                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span style="color: black" data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
+                                        template: notify_template()
                                     });
                                 }
                             }
@@ -369,13 +408,13 @@ if (!isset($data))
                     })
             });
 
-            $("button#modal-do-edit").on('click', function (event)
+            $(document).on('click', "button.btn-go-year", function (event)
             {
                 event.preventDefault();
                 location.href = $(this).attr('action');
             });
 
-            $("button.btn-go-detail").on('click', function (event)
+            $(document).on('click', "button.btn-go-detail", function (event)
             {
                 event.preventDefault();
                 $.ajax({
@@ -403,8 +442,8 @@ if (!isset($data))
                                 }
                                 $("p#modal_deskripsi").append(data['data']['result']['description']);
                                 $("p#modal_status").append(data['data']['result']['status'] == null ? '-' : data['data']['result']['status']);
-                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('law/year?year=' . $dataYear)?>');
-                                $("button#modal-do-delete").attr('action', data['data'].hasOwnProperty('delete') ? data['data']['delete'] : '<?php echo site_url('law/year?year=' . $dataYear)?>');
+                                $("button#modal-do-edit").attr('action', data['data'].hasOwnProperty('edit') ? data['data']['edit'] : '<?php echo site_url('/dashboard')?>');
+                                $("button#modal-do-delete").attr('action', data['data'].hasOwnProperty('delete') ? data['data']['delete'] : '<?php echo site_url('/dashboard')?>');
                                 if (data['data']['result']['reference'] == null)
                                 {
                                     $("a#modal_source_download").hide();
@@ -447,6 +486,12 @@ if (!isset($data))
                             type: 'danger'
                         });
                     });
+            });
+
+            $(document).on('click', "button#modal-do-edit", function (event)
+            {
+                event.preventDefault();
+                location.href = $(this).attr('action');
             });
 
             $('button#modal-do-delete').confirmation({
@@ -512,15 +557,133 @@ if (!isset($data))
                 }
             });
 
-            $('table#uu_data').DataTable({
+            var table = $('table#uu_data').DataTable({
                 "paging": true,
+                "pageLength": 15,
                 "lengthChange": false,
-                "searching": false,
+                "searching": true,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false
             });
-        });
+
+            $(document).on('click', 'a.view_layout_change', function (event)
+            {
+                event.preventDefault();
+                var type = $(this).attr('x-view');
+                var path = $('meta[name="path"]').attr('content');
+                type = ((type === undefined) || (type === null)) ? 'default' : type;
+                var attrib = {};
+                if ((path !== undefined) && (path !== null))
+                {
+                    attrib['path'] = path;
+                }
+                Cookies.set('view_layout', type, attrib);
+                location.reload(true);
+            });
+
+            NProgress.configure({
+                showSpinner: false,
+                template: '<div class="bar" role="bar" style="background-color: red"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'
+            });
+
+            this.retreiveData = function (table, link, progress)
+            {
+                $.ajax({
+                    type: 'post',
+                    url: link,
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
+                })
+                    .done(function (data)
+                    {
+                        if (data.hasOwnProperty('data'))
+                        {
+                            if (data['data'].hasOwnProperty('data'))
+                            {
+                                var contents = data['data']['data'];
+                                for (var i = -1; ++i < contents.length;)
+                                {
+                                    var content = contents[i];
+                                    var tags = '';
+                                    for (var j = -1; ++j < content['tag'].length;)
+                                    {
+                                        var tag = content['tag'][j];
+                                        tags += "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + tag['color'] + "; color: #" + tag['colortext'] + "\"><abbr title=\"" + tag['description'] + "\">" + tag['name'] + "</abbr></span>";
+                                    }
+                                    var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
+                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags, edit_button]);
+                                }
+                                table.draw(true);
+                            }
+                        }
+                        progress.done();
+                    })
+                    .fail(function ()
+                    {
+                        progress.done();
+                    });
+            };
+
+            $("form#uu_form_search").on('submit', function (event)
+            {
+                event.preventDefault();
+                var form = $(this);
+                var data_sent = form.serializeObject();
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: data_sent,
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
+                })
+                    .done(function (data)
+                    {
+                        if (data.hasOwnProperty('data'))
+                        {
+                            if (data['data'].hasOwnProperty('data'))
+                            {
+                                var contents = data['data']['data'];
+                                table.clear();
+                                if (contents.length <= 0)
+                                {
+                                    $.notify({
+                                        message: 'Data tidak ditemukan'
+                                    }, {
+                                        // settings
+                                        type: 'info',
+                                        delay: 1000,
+                                        timer: 500,
+                                        template: notify_template()
+                                    });
+                                }
+                                else
+                                {
+                                    NProgress.start();
+                                }
+                                for (var i = -1; ++i < contents.length;)
+                                {
+                                    var content = contents[i];
+                                    var tags = '';
+                                    for (var j = -1; ++j < content['tag'].length;)
+                                    {
+                                        var tag = content['tag'][j];
+                                        tags += "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + tag['color'] + "; color: #" + tag['colortext'] + "\"><abbr title=\"" + tag['description'] + "\">" + tag['name'] + "</abbr></span>";
+                                    }
+                                    var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
+                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags + "<br><p style='font-size: 10px'>" + content['description'] + "</p>", edit_button]);
+                                }
+                                table.draw(true);
+                            }
+                        }
+                        NProgress.done();
+                    })
+                    .fail(function ()
+                    {
+                        NProgress.done();
+                    })
+            });
+        })
 
         /*
          * Run right away
