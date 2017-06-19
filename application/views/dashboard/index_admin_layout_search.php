@@ -223,6 +223,49 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Peraturan</h3>
                     </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <form class="form-horizontal" id="uu_form_search" action="<?php echo site_url('/dashboard/do_search') ?>" method="post">
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Nomor</label>
+                                            <div class="col-sm-10">
+                                                <input name="no" type="text" class="form-control" placeholder="Status Hukum">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Tahun</label>
+                                            <div class="col-sm-10">
+                                                <input name="year" type="text" class="form-control" placeholder="Tahun">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Tentang</label>
+                                            <div class="col-sm-10">
+                                                <input name="description" type="text" class="form-control" placeholder="Deskripsi">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Status</label>
+                                            <div class="col-sm-10">
+                                                <input name="status" type="text" class="form-control" placeholder="Status">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn btn-info pull-right">Cari</button>
+                                    </div>
+                                    <!-- /.box-footer -->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+
+                <div class="box box-primary">
                     <div class="box-body" style="padding: 16px;min-height: 400px">
                         <div class="row" style="min-height: 600px">
                             <div class="col-md-10 col-md-offset-1">
@@ -279,7 +322,7 @@
 <!-- ./wrapper -->
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js') ?>"></script>
 <script>window.jQuery || document.write('<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery/dist/jquery.min.js')?>"><\/script>')</script>
-
+<script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/jquery-serialize-object/dist/jquery.serialize-object.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/tether/dist/js/tether.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
 <script type="text/javascript" src="<?php echo base_url('assets/frontend/bower_components/bootstrap-confirmation2/bootstrap-confirmation.min.js') ?>"></script>
@@ -577,12 +620,49 @@
                     });
             };
 
-            var link = $('meta[name="source"]').attr('content');
-            if ((link !== undefined) && (link !== null))
+            $("form#uu_form_search").on('submit', function (event)
             {
-                NProgress.start();
-                //this.retreiveData(table, link, NProgress);
-            }
+                event.preventDefault();
+                var form = $(this);
+                var data_sent = form.serializeObject();
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: data_sent,
+                    dataType: 'json',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8; X-Requested-With: XMLHttpRequest'
+                })
+                    .done(function (data)
+                    {
+                        console.log(data);
+                        if (data.hasOwnProperty('data'))
+                        {
+                            table.clear();
+                            if (data['data'].hasOwnProperty('data'))
+                            {
+                                var contents = data['data']['data'];
+                                for (var i = -1; ++i < contents.length;)
+                                {
+                                    var content = contents[i];
+                                    var tags = '';
+                                    for (var j = -1; ++j < content['tag'].length;)
+                                    {
+                                        var tag = content['tag'][j];
+                                        tags += "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + tag['color'] + "; color: #" + tag['colortext'] + "\"><abbr title=\"" + tag['description'] + "\">" + tag['name'] + "</abbr></span>";
+                                    }
+                                    var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
+                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags, edit_button]);
+                                }
+                                table.draw(true);
+                            }
+                        }
+                        NProgress.done();
+                    })
+                    .fail(function ()
+                    {
+                        NProgress.done();
+                    })
+            });
         })
 
         /*
