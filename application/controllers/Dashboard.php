@@ -227,9 +227,9 @@ class Dashboard extends CI_Controller
                     $data[$key]['tag'] = $this->mtag->getFromDataTag($value['id']);
                 }
                 $data[$key]['category'] =& $category["${value['category']}."];
-                if (strlen($data[$key]['description']) > 100)
+                if (strlen($data[$key]['description']) > 50)
                 {
-                    $pos = strpos($data[$key]['description'], ' ', 100);
+                    $pos = strpos($data[$key]['description'], ' ', 50);
                     $data[$key]['description'] = substr($data[$key]['description'], 0, $pos) . '...';
                 }
 
