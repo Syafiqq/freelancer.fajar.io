@@ -274,7 +274,7 @@
                                     <tr>
                                         <th style="width: 48px">No</th>
                                         <th style="width: 60px">Tahun</th>
-                                        <th style="width: 250px">Kategori</th>
+                                        <th style="width: 200px">Kategori</th>
                                         <th>Nomor</th>
                                         <th style="width: 80px">Detail</th>
                                     </tr>
@@ -671,7 +671,7 @@
                                         tags += "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + tag['color'] + "; color: #" + tag['colortext'] + "\"><abbr title=\"" + tag['description'] + "\">" + tag['name'] + "</abbr></span>";
                                     }
                                     var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
-                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags, edit_button]);
+                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags + "<br><p style='font-size: 10px'>" + content['description'] + "</p>", edit_button]);
                                 }
                                 table.draw(true);
                             }
