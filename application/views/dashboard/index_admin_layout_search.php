@@ -343,6 +343,20 @@
          */
         $(function ()
         {
+            var notify_template = function ()
+            {
+                return '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                    '<span data-notify="icon"></span> ' +
+                    '<span data-notify="title">{1}</span> ' +
+                    '<span style="color: black" data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar">' +
+                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                    '</div>' +
+                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                    '</div>';
+            };
+
             $(document).on('click', "a#sign-out, a#versioning", function (event)
             {
                 event.preventDefault();
@@ -363,16 +377,7 @@
                                 {
                                     $.notify({message: notify[i][0]}, {
                                         type: notify[i][1],
-                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                        '<span data-notify="icon"></span> ' +
-                                        '<span data-notify="title">{1}</span> ' +
-                                        '<span style="color: black" data-notify="message">{2}</span>' +
-                                        '<div class="progress" data-notify="progressbar">' +
-                                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                                        '</div>' +
-                                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                                        '</div>'
+                                        template: notify_template()
                                     });
                                 }
                             }
@@ -634,12 +639,11 @@
                 })
                     .done(function (data)
                     {
-                        console.log(data);
                         if (data.hasOwnProperty('data'))
                         {
-                            table.clear();
                             if (data['data'].hasOwnProperty('data'))
                             {
+                                table.clear();
                                 var contents = data['data']['data'];
                                 for (var i = -1; ++i < contents.length;)
                                 {
@@ -652,6 +656,18 @@
                                     }
                                     var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
                                     table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags, edit_button]);
+                                }
+                                if (contents.length <= 0)
+                                {
+                                    $.notify({
+                                        message: 'Data tidak ditemukan'
+                                    }, {
+                                        // settings
+                                        type: 'info',
+                                        delay: 1000,
+                                        timer: 500,
+                                        template: notify_template()
+                                    });
                                 }
                                 table.draw(true);
                             }
