@@ -643,20 +643,8 @@
                         {
                             if (data['data'].hasOwnProperty('data'))
                             {
-                                table.clear();
                                 var contents = data['data']['data'];
-                                for (var i = -1; ++i < contents.length;)
-                                {
-                                    var content = contents[i];
-                                    var tags = '';
-                                    for (var j = -1; ++j < content['tag'].length;)
-                                    {
-                                        var tag = content['tag'][j];
-                                        tags += "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + tag['color'] + "; color: #" + tag['colortext'] + "\"><abbr title=\"" + tag['description'] + "\">" + tag['name'] + "</abbr></span>";
-                                    }
-                                    var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
-                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags, edit_button]);
-                                }
+                                table.clear();
                                 if (contents.length <= 0)
                                 {
                                     $.notify({
@@ -668,6 +656,22 @@
                                         timer: 500,
                                         template: notify_template()
                                     });
+                                }
+                                else
+                                {
+                                    NProgress.start();
+                                }
+                                for (var i = -1; ++i < contents.length;)
+                                {
+                                    var content = contents[i];
+                                    var tags = '';
+                                    for (var j = -1; ++j < content['tag'].length;)
+                                    {
+                                        var tag = content['tag'][j];
+                                        tags += "&nbsp;&nbsp;<span class=\"label label-default\" style=\"background-color: #" + tag['color'] + "; color: #" + tag['colortext'] + "\"><abbr title=\"" + tag['description'] + "\">" + tag['name'] + "</abbr></span>";
+                                    }
+                                    var edit_button = "<button type=\"button\" action=\"" + data['data']['on_edit'] + content['id'] + "\" class=\"btn btn-go-detail btn-block btn-primary btn-xs\"><i class=\"fa fa-search\"></i> Detail</button>";
+                                    table.row.add([(i + 1), content['year'], content['category']['name'], content['no'] + tags, edit_button]);
                                 }
                                 table.draw(true);
                             }
