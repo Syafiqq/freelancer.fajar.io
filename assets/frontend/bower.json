@@ -36,6 +36,7 @@
     "js-cookie": "^2.1.4",
     "nprogress": "^0.2.0",
     "jquery.sparkline": "https://github.com/gwatts/jquery.sparkline.git#^2.1.2",
-    "jquery-slimscroll": "https://github.com/rochal/jQuery-slimScroll.git#^1.3.8"
+    "jquery-slimscroll": "https://github.com/rochal/jQuery-slimScroll.git#^1.3.8",
+    "html5-boilerplate": "https://github.com/h5bp/html5-boilerplate.git#^6.0.0"
   }
 }
